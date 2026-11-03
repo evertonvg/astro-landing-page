@@ -2,12 +2,13 @@
 import { Icon } from 'astro-icon/components';
 import { t } from '../../i18n/pt-BR';
 import { site } from '../../site.config';
-import { getSection } from '../../lib/sections';
+import { getSection, pageHref } from '../../lib/sections';
 import Container from '../ui/Container.astro';
 
 const footer = await getSection('footer');
 if (!footer) throw new Error('Missing footer section content (src/content/sections/footer.yaml)');
 
+const { pathname } = Astro.url;
 const copyright = footer.copyright.replace('{year}', String(new Date().getFullYear()));
 ---
 
@@ -41,7 +42,7 @@ const copyright = footer.copyright.replace('{year}', String(new Date().getFullYe
           <ul class="mt-4 space-y-2 text-sm">
             {column.links.map((link) => (
               <li>
-                <a href={link.href} class="hover:text-white hover:underline">
+                <a href={pageHref(link.href, pathname)} class="hover:text-white hover:underline">
                   {link.label}
                 </a>
               </li>

@@ -17,5 +17,10 @@ export default defineConfig(
   tseslint.configs.strict,
   eslintPluginAstro.configs.recommended,
   eslintPluginAstro.configs['jsx-a11y-strict'],
+  {
+    // Scrollable table wrapper must be keyboard-focusable (axe: scrollable-region-focusable).
+    files: ['src/components/legal/CookieTable.astro'],
+    rules: { 'astro/jsx-a11y/no-noninteractive-tabindex': 'off' },
+  },
   eslintConfigPrettier,
 );

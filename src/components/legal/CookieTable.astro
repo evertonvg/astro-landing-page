@@ -1,0 +1,61 @@
+---
+import { t } from '../../i18n/pt-BR';
+import { cookieTable, type ConsentCategory } from '../../lib/consent';
+
+const order: ConsentCategory[] = ['necessary', 'analytics', 'marketing', 'media'];
+const groups = order
+  .map((category) => ({
+    category,
+    title: t.consent.categories[category].title,
+    rows: cookieTable.filter((row) => row.category === category),
+  }))
+  .filter((group) => group.rows.length > 0);
+---
+
+<div
+  class="not-prose overflow-x-auto"
+  tabindex="0"
+  role="region"
+  aria-label="Cookies utilizados neste site"
+>
+  <table class="w-full border-collapse text-left text-sm">
+    <caption class="sr-only">Cookies utilizados neste site</caption>
+    <thead>
+      <tr class="border-b border-neutral-300 text-neutral-900">
+        <th scope="col" class="px-3 py-2 font-semibold">
+          Cookie
+        </th>
+        <th scope="col" class="px-3 py-2 font-semibold">
+          Provedor
+        </th>
+        <th scope="col" class="px-3 py-2 font-semibold">
+          Finalidade
+        </th>
+        <th scope="col" class="px-3 py-2 font-semibold">
+          Duração
+        </th>
+      </tr>
+    </thead>
+    {groups.map((group) => (
+      <tbody>
+        <tr>
+          <th
+            scope="colgroup"
+            colspan="4"
+            class="bg-neutral-100 px-3 py-2 text-left font-semibold text-neutral-900"
+          >
+            {group.title}
+          </th>
+        </tr>
+        {group.rows.map((row) => (
+          <tr class="border-b border-neutral-200 align-top text-neutral-700">
+            <td class="px-3 py-2 font-mono">{row.name}</td>
+            <td class="px-3 py-2">{row.provider}</td>
+            <td class="px-3 py-2">{row.purpose}</td>
+            <td class="px-3 py-2">{row.duration}</td>
+          </tr>
+        ))}
+      </tbody>
+    ))}
+  </table>
+</div>

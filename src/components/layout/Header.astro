@@ -2,7 +2,7 @@
 import { Image } from 'astro:assets';
 import { Icon } from 'astro-icon/components';
 import { t } from '../../i18n/pt-BR';
-import { buildNav, enabledSections, getSection } from '../../lib/sections';
+import { buildNav, enabledSections, getSection, pageHref } from '../../lib/sections';
 import Button from '../ui/Button.astro';
 import Container from '../ui/Container.astro';
 import MobileMenu from './MobileMenu.astro';
@@ -10,7 +10,12 @@ import MobileMenu from './MobileMenu.astro';
 const header = await getSection('header');
 if (!header) throw new Error('Missing header section content (src/content/sections/header.yaml)');
 
-const links = buildNav(header.links, await enabledSections());
+const { pathname } = Astro.url;
+const links = buildNav(header.links, await enabledSections()).map((link) => ({
+  ...link,
+  href: pageHref(link.href, pathname),
+}));
+const cta = header.cta && { ...header.cta, href: pageHref(header.cta.href, pathname) };
 ---
 
 <header class="sticky top-0 z-40 border-b border-neutral-200 bg-white">
@@ -40,9 +45,9 @@ const links = buildNav(header.links, await enabledSections());
       </nav>
 
       <div class="flex items-center gap-2">
-        {header.cta && (
-          <Button href={header.cta.href} variant={header.cta.variant} class="hidden md:inline-flex">
-            {header.cta.label}
+        {cta && (
+          <Button href={cta.href} variant={cta.variant} class="hidden md:inline-flex">
+            {cta.label}
           </Button>
         )}
         <button
@@ -56,7 +61,7 @@ const links = buildNav(header.links, await enabledSections());
         </button>
       </div>
 
-      <MobileMenu links={links} cta={header.cta} />
+      <MobileMenu links={links} cta={cta} />
     </div>
   </Container>
 </header>

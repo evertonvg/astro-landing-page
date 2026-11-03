@@ -9,6 +9,7 @@ import {
   headerSchema,
   heroSchema,
   howItWorksSchema,
+  legalSchema,
   logosSchema,
   pricingSchema,
   testimonialsSchema,
@@ -34,4 +35,8 @@ export const collections = {
   cta: defineCollection({ loader: section('cta'), schema: ctaSchema() }),
   contact: defineCollection({ loader: section('contact'), schema: contactSchema() }),
   footer: defineCollection({ loader: section('footer'), schema: footerSchema() }),
+  legal: defineCollection({
+    loader: glob({ pattern: '*.md', base: './src/content/legal' }),
+    schema: legalSchema(),
+  }),
 };

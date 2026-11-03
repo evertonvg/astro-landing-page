@@ -39,3 +39,13 @@ export function faqPageJsonLd(items: { question: string; answerText: string }[])
 export function serializeJsonLd(data: object): string {
   return JSON.stringify(data).replace(/</g, String.raw`\u003c`);
 }
+
+export const OG_SLUGS = ['index', 'privacidade', 'termos'] as const;
+
+/** Slug of the generated OG image for a pathname; unknown pages fall back to `index`. */
+export function ogSlug(pathname: string): (typeof OG_SLUGS)[number] {
+  const slug = pathname.replace(/^\/|\/$/g, '') || 'index';
+  return (OG_SLUGS as readonly string[]).includes(slug)
+    ? (slug as (typeof OG_SLUGS)[number])
+    : 'index';
+}

@@ -37,3 +37,8 @@ export async function enabledSections(): Promise<Set<SectionKey>> {
 export function buildNav(links: HeaderLink[], enabled: Set<SectionKey>): HeaderLink[] {
   return links.filter((link) => !link.section || enabled.has(link.section));
 }
+
+/** Anchors (`#x`) only work on the home page; elsewhere they must point back to `/#x`. */
+export function pageHref(href: string, pathname: string): string {
+  return href.startsWith('#') && pathname !== '/' ? `/${href}` : href;
+}

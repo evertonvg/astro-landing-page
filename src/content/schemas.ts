@@ -198,3 +198,10 @@ export const footerSchema = () =>
     ),
     copyright: z.string().min(1),
   });
+
+export const legalSchema = () =>
+  z.object({
+    title: z.string().min(1),
+    description: z.string().min(1),
+    updatedAt: z.coerce.date(),
+  });
