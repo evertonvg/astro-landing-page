@@ -1,0 +1,81 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { t } from '../../i18n/pt-BR';
+import Button from '../ui/Button.astro';
+import Container from '../ui/Container.astro';
+import SlideBackground from './SlideBackground.astro';
+
+type Slide = CollectionEntry<'hero'>['data']['slides'][number];
+
+interface Props {
+  slide: Slide;
+  index: number;
+  total: number;
+  carousel: boolean;
+}
+
+const { slide, index, total, carousel } = Astro.props;
+const first = index === 0;
+
+const alignment = {
+  left: 'items-start text-left',
+  center: 'items-center text-center',
+  right: 'items-end text-right',
+}[slide.align];
+const titleClass =
+  'font-display text-4xl font-bold tracking-tight text-white sm:text-5xl lg:text-6xl';
+
+// Only the first slide's title is the page's `h1`; later ones are visual headings.
+const Title = first ? 'h1' : 'p';
+const carouselAttrs: Record<string, string | boolean | undefined> = carousel
+  ? {
+      role: 'group',
+      'aria-roledescription': 'slide',
+      'aria-label': t.carousel.slideLabel(index + 1, total),
+      'data-active': first ? 'true' : undefined,
+      'aria-hidden': first ? 'false' : 'true',
+      inert: !first,
+      ':data-active': `selected === ${index}`,
+      ':aria-hidden': `selected !== ${index} ? 'true' : 'false'`,
+      ':inert': `selected !== ${index}`,
+    }
+  : {};
+---
+
+<div
+  class:list={[
+    'relative isolate flex min-h-[32rem] min-w-0 flex-[0_0_100%] items-center overflow-hidden bg-neutral-900 md:min-h-[40rem]',
+  ]}
+  {...carouselAttrs}
+>
+  <SlideBackground background={slide.background} first={first} standalone={!carousel} />
+  <div
+    class="absolute inset-0 bg-black"
+    style={`opacity: ${slide.overlay}`}
+    aria-hidden="true"
+  ></div>
+  <Container class="relative z-10 py-20">
+    <div class:list={['flex flex-col gap-6', alignment]}>
+      <Title class:list={[titleClass, 'max-w-3xl']}>{slide.title}</Title>
+      {slide.description && (
+        <p class="max-w-2xl text-lg text-white sm:text-xl">{slide.description}</p>
+      )}
+      {slide.buttons.length > 0 && (
+        <div class="flex flex-wrap gap-3">
+          {slide.buttons.map((button) => (
+            <Button
+              href={button.href}
+              variant={button.variant}
+              size="lg"
+              class={
+                button.variant === 'secondary' ? 'border-white text-white hover:bg-white/10' : ''
+              }
+            >
+              {button.label}
+            </Button>
+          ))}
+        </div>
+      )}
+    </div>
+  </Container>
+</div>

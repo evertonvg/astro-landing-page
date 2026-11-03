@@ -1,0 +1,68 @@
+---
+import { Picture } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+import { t } from '../../i18n/pt-BR';
+
+type Background = CollectionEntry<'hero'>['data']['slides'][number]['background'];
+
+interface Props {
+  background: Background;
+  /** The first slide is the LCP candidate: eager image, autoplaying video. */
+  first: boolean;
+  /** Single-slide heroes have no carousel to pause a video under reduced motion. */
+  standalone: boolean;
+}
+
+const { background, first, standalone } = Astro.props;
+const imageProps = {
+  formats: ['avif', 'webp'] as ('avif' | 'webp')[],
+  widths: [640, 1280, 1920],
+  sizes: '100vw',
+  loading: first ? ('eager' as const) : ('lazy' as const),
+  fetchpriority: first ? ('high' as const) : ('auto' as const),
+  class: 'absolute inset-0 size-full object-cover',
+};
+---
+
+{background.type === 'image' && (
+  <Picture src={background.src} alt={background.alt} {...imageProps} />
+)}
+{background.type === 'video' && (
+  <video
+    class="absolute inset-0 size-full object-cover"
+    muted
+    loop
+    playsinline
+    preload="none"
+    autoplay={first}
+    aria-hidden="true"
+    poster={background.poster.src}
+    src={background.src}
+    x-data={first && standalone ? 'heroVideo' : undefined}
+  />
+)}
+{background.type === 'youtube' && (
+  <div x-data={`youtubeEmbed('${background.videoId}')`} class="absolute inset-0">
+    <Picture src={background.poster} alt="" {...imageProps} />
+    <template x-if="src">
+      <iframe
+        x-bind:src="src"
+        title={t.carousel.videoTitle}
+        allow="autoplay; encrypted-media"
+        tabindex="-1"
+        aria-hidden="true"
+        loading="lazy"
+        class="absolute inset-0 size-full border-0"
+      />
+    </template>
+    <button
+      type="button"
+      x-show="needsConsent"
+      x-cloak
+      @click="openPreferences()"
+      class="absolute top-4 right-4 z-20 rounded-lg bg-white px-4 py-2 text-sm font-semibold text-neutral-900 hover:bg-neutral-100"
+    >
+      {t.carousel.enableVideo}
+    </button>
+  </div>
+)}

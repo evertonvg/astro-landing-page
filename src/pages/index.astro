@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/layout/Header.astro';
 import Footer from '../components/layout/Footer.astro';
+import Hero from '../components/sections/Hero.astro';
 import Logos from '../components/sections/Logos.astro';
 import Features from '../components/sections/Features.astro';
 import HowItWorks from '../components/sections/HowItWorks.astro';
@@ -19,7 +20,7 @@ const jsonLd = faq ? [faqPageJsonLd(renderFaqItems(faq.items))] : [];
 
 <BaseLayout title="Início" jsonLd={jsonLd}>
   <Header slot="header" />
-  <h1 class="sr-only">Landing page</h1>
+  <Hero />
   <Logos />
   <Features />
   <HowItWorks />

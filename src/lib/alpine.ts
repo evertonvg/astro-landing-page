@@ -2,6 +2,8 @@ import type { Alpine } from 'alpinejs';
 import collapse from '@alpinejs/collapse';
 import focus from '@alpinejs/focus';
 import ui from '@alpinejs/ui';
+import carousel, { heroVideo } from './carousel';
+import youtubeEmbed from './youtube-embed';
 import mobileMenu from './mobile-menu';
 import pricing from './pricing';
 
@@ -14,4 +16,7 @@ export default (Alpine: Alpine) => {
 
   Alpine.data('mobileMenu', mobileMenu);
   Alpine.data('pricing', pricing);
+  Alpine.data('carousel', carousel);
+  Alpine.data('heroVideo', heroVideo);
+  Alpine.data('youtubeEmbed', youtubeEmbed);
 };

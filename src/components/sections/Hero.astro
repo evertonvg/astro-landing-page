@@ -1,0 +1,103 @@
+---
+import { Icon } from 'astro-icon/components';
+import type { CollectionEntry } from 'astro:content';
+import { t } from '../../i18n/pt-BR';
+import { getSection } from '../../lib/sections';
+import HeroSlide from '../hero/HeroSlide.astro';
+
+interface Props {
+  data?: CollectionEntry<'hero'>['data'];
+}
+
+const data = Astro.props.data ?? (await getSection('hero'));
+const slides = data?.slides ?? [];
+const isCarousel = slides.length > 1;
+const config = data && {
+  autoplay: data.autoplay.enabled,
+  intervalMs: data.autoplay.intervalMs,
+  transition: data.transition,
+  count: slides.length,
+};
+const controlClass =
+  'flex size-11 items-center justify-center rounded-full bg-white text-neutral-900 shadow hover:bg-neutral-100';
+---
+
+{data && !isCarousel && (
+  <section id="hero" aria-label={t.carousel.label}>
+    <HeroSlide slide={slides[0]} index={0} total={1} carousel={false} />
+  </section>
+)}
+{data && isCarousel && (
+  <section
+    id="hero"
+    class="relative"
+    aria-roledescription="carousel"
+    aria-label={t.carousel.label}
+    x-data={`carousel(${JSON.stringify(config)})`}
+  >
+    <div x-ref="viewport" class="overflow-hidden">
+      <div class="flex" aria-live="off" :aria-live="playing ? 'off' : 'polite'">
+        {slides.map((slide, index) => (
+          <HeroSlide slide={slide} index={index} total={slides.length} carousel={true} />
+        ))}
+      </div>
+    </div>
+    <button
+      type="button"
+      class:list={[controlClass, 'absolute top-1/2 left-4 z-20 -translate-y-1/2']}
+      aria-label={t.carousel.prev}
+      @click="prev()"
+    >
+      <Icon name="lucide:chevron-left" class="size-6" aria-hidden="true" />
+    </button>
+    <button
+      type="button"
+      class:list={[controlClass, 'absolute top-1/2 right-4 z-20 -translate-y-1/2']}
+      aria-label={t.carousel.next}
+      @click="next()"
+    >
+      <Icon name="lucide:chevron-right" class="size-6" aria-hidden="true" />
+    </button>
+    <div class="pointer-events-none absolute inset-x-0 bottom-4 z-20 flex items-center justify-center gap-3">
+      <div
+        class="pointer-events-auto flex items-center gap-1 rounded-full bg-white/90 px-2"
+        role="group"
+        aria-label={t.carousel.dotsLabel}
+      >
+        {slides.map((_, index) => (
+          <button
+            type="button"
+            class="group flex size-6 items-center justify-center"
+            aria-label={t.carousel.goTo(index + 1)}
+            :aria-current="selected === index ? 'true' : null"
+            @click={`goTo(${index})`}
+          >
+            <span
+              class="size-3 rounded-full border-2 border-neutral-900 group-aria-[current=true]:bg-neutral-900"
+              aria-hidden="true"
+            />
+          </button>
+        ))}
+      </div>
+      <button
+        type="button"
+        x-show="canAutoplay && playing"
+        class:list={[controlClass, 'pointer-events-auto size-9']}
+        aria-label={t.carousel.pause}
+        @click="togglePlay()"
+      >
+        <Icon name="lucide:pause" class="size-5" aria-hidden="true" />
+      </button>
+      <button
+        type="button"
+        x-show="canAutoplay && !playing"
+        x-cloak
+        class:list={[controlClass, 'pointer-events-auto size-9']}
+        aria-label={t.carousel.play}
+        @click="togglePlay()"
+      >
+        <Icon name="lucide:play" class="size-5" aria-hidden="true" />
+      </button>
+    </div>
+  </section>
+)}

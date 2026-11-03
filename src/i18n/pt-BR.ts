@@ -7,9 +7,16 @@ export const t = {
     homeLabel: 'Ir para o início',
   },
   carousel: {
-    label: 'Carrossel',
-    previous: 'Slide anterior',
+    label: 'Destaques',
+    prev: 'Slide anterior',
     next: 'Próximo slide',
+    goTo: (n: number) => `Ir para o slide ${n}`,
+    slideLabel: (index: number, total: number) => `${index} de ${total}`,
+    pause: 'Pausar carrossel',
+    play: 'Reproduzir carrossel',
+    enableVideo: 'Ativar vídeo',
+    videoTitle: 'Vídeo de fundo',
+    dotsLabel: 'Escolher slide',
   },
   form: {
     submit: 'Enviar',
