@@ -1,0 +1,47 @@
+---
+import '../styles/global.css';
+import Seo from '../components/seo/Seo.astro';
+import JsonLd from '../components/seo/JsonLd.astro';
+import SkipLink from '../components/layout/SkipLink.astro';
+import { site } from '../site.config';
+import { organizationJsonLd, websiteJsonLd } from '../lib/seo';
+
+interface Props {
+  title: string;
+  description?: string;
+  ogImage?: string;
+  jsonLd?: object[];
+}
+
+const { title, description, ogImage, jsonLd = [] } = Astro.props;
+const seoSite = {
+  name: site.name,
+  url: site.url,
+  email: site.email,
+  social: site.social,
+  logoUrl: new URL(site.logo.src, Astro.site).href,
+};
+const structuredData = [organizationJsonLd(seoSite), websiteJsonLd(seoSite), ...jsonLd];
+---
+
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <Seo title={title} description={description} ogImage={ogImage} />
+    {structuredData.map((data) => (
+      <JsonLd data={data} />
+    ))}
+    <slot name="head" />
+  </head>
+  <body>
+    <SkipLink />
+    <slot name="header" />
+    <main id="main" tabindex="-1">
+      <slot />
+    </main>
+    <slot name="footer" />
+  </body>
+</html>
