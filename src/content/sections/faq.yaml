@@ -1,0 +1,15 @@
+enabled: true
+title: 'Perguntas frequentes'
+items:
+  - question: 'Como posso começar?'
+    answer: 'Basta preencher o formulário de [contato](#contato) e retornaremos em até 1 dia útil.'
+  - question: 'Existe contrato de fidelidade?'
+    answer: 'Não. Você pode cancelar a qualquer momento, **sem multa**.'
+  - question: 'Quais formas de pagamento são aceitas?'
+    answer: 'Cartão de crédito, boleto e Pix.'
+  - question: 'Posso trocar de plano depois?'
+    answer: 'Sim, você pode mudar de plano quando quiser.'
+  - question: 'Vocês oferecem suporte?'
+    answer: 'Sim, todos os planos incluem suporte. Os planos superiores têm atendimento prioritário.'
+  - question: 'Como meus dados são tratados?'
+    answer: 'Seguimos a LGPD. Saiba mais na nossa [política de privacidade](/privacidade).'

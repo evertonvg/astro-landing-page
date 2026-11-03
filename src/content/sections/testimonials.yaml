@@ -1,0 +1,18 @@
+enabled: true
+title: 'O que dizem nossos clientes'
+items:
+  - quote: 'O atendimento foi excelente e os resultados apareceram rápido.'
+    name: 'Ana Souza'
+    role: 'Diretora'
+    company: 'Empresa Alfa'
+    avatar: ../../assets/testimonials/avatar-1.jpg
+  - quote: 'Processo simples e transparente do início ao fim.'
+    name: 'Carlos Lima'
+    role: 'Gerente de Marketing'
+    company: 'Empresa Beta'
+    avatar: ../../assets/testimonials/avatar-2.jpg
+  - quote: 'Recomendo para quem busca uma parceria de confiança.'
+    name: 'Marina Costa'
+    role: 'Fundadora'
+    company: 'Empresa Gama'
+    avatar: ../../assets/testimonials/avatar-3.jpg

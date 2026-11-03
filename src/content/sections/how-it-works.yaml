@@ -1,0 +1,12 @@
+enabled: true
+title: 'Como funciona'
+steps:
+  - { title: 'Fale conosco', description: 'Conte o que você precisa e entendemos o seu cenário.' }
+  - {
+      title: 'Receba uma proposta',
+      description: 'Montamos um plano sob medida, com prazos e valores claros.',
+    }
+  - {
+      title: 'Comece a crescer',
+      description: 'Colocamos tudo em prática e acompanhamos os resultados.',
+    }

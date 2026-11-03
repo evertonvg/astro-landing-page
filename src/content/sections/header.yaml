@@ -1,0 +1,10 @@
+logo: ../../assets/brand/logo.png
+logoAlt: Sua Empresa
+links:
+  - { label: 'Recursos', href: '#features', section: features }
+  - { label: 'Como funciona', href: '#como-funciona', section: how-it-works }
+  - { label: 'Depoimentos', href: '#depoimentos', section: testimonials }
+  - { label: 'Preços', href: '#precos', section: pricing }
+  - { label: 'Perguntas', href: '#faq', section: faq }
+  - { label: 'Contato', href: '#contato', section: contact }
+cta: { label: 'Fale conosco', href: '#contato', variant: primary }

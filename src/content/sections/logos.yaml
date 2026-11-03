@@ -1,0 +1,9 @@
+enabled: true
+title: 'Quem confia em nós'
+items:
+  - { name: 'Marca 1', image: ../../assets/logos/logo-1.png }
+  - { name: 'Marca 2', image: ../../assets/logos/logo-2.png }
+  - { name: 'Marca 3', image: ../../assets/logos/logo-3.png }
+  - { name: 'Marca 4', image: ../../assets/logos/logo-4.png }
+  - { name: 'Marca 5', image: ../../assets/logos/logo-5.png }
+  - { name: 'Marca 6', image: ../../assets/logos/logo-6.png }

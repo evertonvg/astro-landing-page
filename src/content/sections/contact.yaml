@@ -1,0 +1,9 @@
+enabled: true
+title: 'Entre em contato'
+description: 'Preencha o formulário e responderemos em breve.'
+subjects:
+  - { value: orcamento, label: 'Orçamento' }
+  - { value: duvida, label: 'Dúvida' }
+  - { value: suporte, label: 'Suporte' }
+  - { value: outro, label: 'Outro' }
+consentLabel: 'Li e concordo com a [Política de Privacidade](/privacidade) e autorizo o uso dos meus dados para contato.'

@@ -1,0 +1,11 @@
+columns:
+  - title: 'Empresa'
+    links:
+      - { label: 'Recursos', href: '#features' }
+      - { label: 'Preços', href: '#precos' }
+      - { label: 'Contato', href: '#contato' }
+  - title: 'Legal'
+    links:
+      - { label: 'Política de Privacidade', href: '/privacidade' }
+      - { label: 'Termos de Uso', href: '/termos' }
+copyright: '© {year} Sua Empresa. Todos os direitos reservados.'

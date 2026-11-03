@@ -1,0 +1,21 @@
+enabled: true
+title: 'Planos e preços'
+subtitle: 'Escolha o plano ideal para o seu negócio.'
+billingToggle: true
+plans:
+  - name: 'Básico'
+    priceMonthly: 49
+    priceYearly: 490
+    features: ['1 usuário', 'Suporte por e-mail', 'Relatórios mensais']
+    cta: { label: 'Começar', href: '#contato', variant: secondary }
+  - name: 'Profissional'
+    priceMonthly: 99
+    priceYearly: 990
+    highlighted: true
+    features: ['5 usuários', 'Suporte prioritário', 'Relatórios semanais', 'Integrações']
+    cta: { label: 'Começar', href: '#contato', variant: primary }
+  - name: 'Empresarial'
+    priceMonthly: 249
+    priceYearly: 2490
+    features: ['Usuários ilimitados', 'Gerente de conta', 'Relatórios em tempo real', 'Integrações']
+    cta: { label: 'Falar com vendas', href: '#contato', variant: secondary }

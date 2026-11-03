@@ -1,0 +1,6 @@
+enabled: true
+title: 'Pronto para começar?'
+description: 'Fale com a nossa equipe e receba uma proposta sem compromisso.'
+buttons:
+  - { label: 'Fale conosco', href: '#contato', variant: primary }
+  - { label: 'Ver planos', href: '#precos', variant: secondary }

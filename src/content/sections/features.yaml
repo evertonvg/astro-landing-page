@@ -1,0 +1,30 @@
+enabled: true
+title: 'Tudo o que você precisa'
+subtitle: 'Recursos pensados para simplificar o seu dia a dia.'
+items:
+  - { icon: zap, title: 'Rápido', description: 'Resultados em poucos dias, sem burocracia.' }
+  - {
+      icon: shield-check,
+      title: 'Seguro',
+      description: 'Seus dados protegidos com as melhores práticas.',
+    }
+  - {
+      icon: headset,
+      title: 'Suporte dedicado',
+      description: 'Uma equipe pronta para ajudar quando você precisar.',
+    }
+  - {
+      icon: chart-line,
+      title: 'Métricas claras',
+      description: 'Acompanhe o desempenho com relatórios fáceis de entender.',
+    }
+  - {
+      icon: puzzle,
+      title: 'Integrações',
+      description: 'Conecte com as ferramentas que você já usa.',
+    }
+  - {
+      icon: smartphone,
+      title: 'Em qualquer lugar',
+      description: 'Acesse de qualquer dispositivo, a qualquer hora.',
+    }

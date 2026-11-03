@@ -1,0 +1,35 @@
+enabled: true
+autoplay: { enabled: true, intervalMs: 7000 }
+transition: fade # fade | slide
+slides:
+  - background:
+      type: image
+      src: ../../assets/hero/slide-1.jpg
+      alt: 'Fundo em degradê azul'
+    overlay: 0.45
+    align: left
+    title: 'Faça sua empresa crescer com a gente'
+    description: 'Soluções simples e eficientes para levar o seu negócio ao próximo nível.'
+    buttons:
+      - { label: 'Comece agora', href: '#contato', variant: primary }
+      - { label: 'Saiba mais', href: '#features', variant: secondary }
+  - background:
+      type: youtube
+      videoId: aqz-KE-bpKQ # Big Buck Bunny (Blender Foundation, CC BY 3.0)
+      poster: ../../assets/hero/poster-youtube.jpg
+    overlay: 0.5
+    align: center
+    title: 'Veja como funciona na prática'
+    description: 'Assista a uma demonstração rápida e descubra o que podemos fazer por você.'
+    buttons:
+      - { label: 'Peça uma demonstração', href: '#contato', variant: primary }
+  - background:
+      type: video
+      src: /media/hero-sample.mp4
+      poster: ../../assets/hero/poster-video.jpg
+    overlay: 0.4
+    align: right
+    title: 'Resultados que você acompanha'
+    description: 'Planos flexíveis para empresas de todos os tamanhos.'
+    buttons:
+      - { label: 'Ver preços', href: '#precos', variant: primary }
