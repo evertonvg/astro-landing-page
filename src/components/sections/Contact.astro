@@ -1,0 +1,236 @@
+---
+import { marked } from 'marked';
+import { t } from '../../i18n/pt-BR';
+import { getSection } from '../../lib/sections';
+import { CONTACT_LIMITS } from '../../lib/contact-schema';
+import { site } from '../../site.config';
+import Container from '../ui/Container.astro';
+import SectionHeading from '../ui/SectionHeading.astro';
+
+const data = await getSection('contact');
+const consentHtml = data ? marked.parseInline(data.consentLabel, { async: false }) : '';
+const options = data
+  ? JSON.stringify({
+      subjects: data.subjects.map((s) => s.value),
+      consentVersion: site.privacyPolicyVersion,
+    })
+  : '';
+
+const fieldClass =
+  'mt-1 block w-full rounded-md border border-neutral-400 bg-white px-3 py-2 text-neutral-900 aria-[invalid=true]:border-red-700';
+const labelClass = 'block text-sm font-medium text-neutral-900';
+const errorClass = 'mt-1 text-sm text-red-700';
+---
+
+{data && (
+  <section id="contato" aria-labelledby="contact-title" class="py-16 sm:py-24">
+    <Container class="max-w-2xl">
+      <SectionHeading id="contact-title" title={data.title} subtitle={data.description} />
+      <div x-data={`contactForm(${options})`} class="mt-12">
+        <form
+          x-show="status !== 'success' && status !== 'error'"
+          novalidate
+          @submit.prevent="onSubmit"
+          class="space-y-5"
+        >
+          <div>
+            <label for="contact-name" class={labelClass}>
+              {t.form.labels.name}
+            </label>
+            <input
+              id="contact-name"
+              x-ref="name"
+              x-model="values.name"
+              type="text"
+              name="name"
+              autocomplete="name"
+              maxlength={CONTACT_LIMITS.name[1]}
+              required
+              class={fieldClass}
+              @blur="validateField('name')"
+              :aria-invalid="errors.name ? 'true' : 'false'"
+              aria-describedby="contact-name-error"
+            />
+            <p
+              id="contact-name-error"
+              class={errorClass}
+              x-show="errors.name"
+              x-text="errors.name"
+            />
+          </div>
+          <div>
+            <label for="contact-email" class={labelClass}>
+              {t.form.labels.email}
+            </label>
+            <input
+              id="contact-email"
+              x-ref="email"
+              x-model="values.email"
+              type="email"
+              name="email"
+              autocomplete="email"
+              maxlength={CONTACT_LIMITS.email}
+              required
+              class={fieldClass}
+              @blur="validateField('email')"
+              :aria-invalid="errors.email ? 'true' : 'false'"
+              aria-describedby="contact-email-error"
+            />
+            <p
+              id="contact-email-error"
+              class={errorClass}
+              x-show="errors.email"
+              x-text="errors.email"
+            />
+          </div>
+          <div>
+            <label for="contact-phone" class={labelClass}>
+              {t.form.labels.phone}
+            </label>
+            <input
+              id="contact-phone"
+              x-ref="phone"
+              x-model="values.phone"
+              x-init="maskPhone($el)"
+              type="tel"
+              name="phone"
+              autocomplete="tel-national"
+              inputmode="tel"
+              class={fieldClass}
+              @blur="validateField('phone')"
+              :aria-invalid="errors.phone ? 'true' : 'false'"
+              aria-describedby="contact-phone-error"
+            />
+            <p
+              id="contact-phone-error"
+              class={errorClass}
+              x-show="errors.phone"
+              x-text="errors.phone"
+            />
+          </div>
+          <div>
+            <label for="contact-subject" class={labelClass}>
+              {t.form.labels.subject}
+            </label>
+            <select
+              id="contact-subject"
+              x-ref="subject"
+              x-model="values.subject"
+              name="subject"
+              required
+              class={fieldClass}
+              @blur="validateField('subject')"
+              :aria-invalid="errors.subject ? 'true' : 'false'"
+              aria-describedby="contact-subject-error"
+            >
+              <option value="">{t.form.selectSubject}</option>
+              {data.subjects.map((s) => (
+                <option value={s.value}>{s.label}</option>
+              ))}
+            </select>
+            <p
+              id="contact-subject-error"
+              class={errorClass}
+              x-show="errors.subject"
+              x-text="errors.subject"
+            />
+          </div>
+          <div>
+            <label for="contact-message" class={labelClass}>
+              {t.form.labels.message}
+            </label>
+            <textarea
+              id="contact-message"
+              x-ref="message"
+              x-model="values.message"
+              name="message"
+              rows="5"
+              maxlength={CONTACT_LIMITS.message[1]}
+              required
+              class={fieldClass}
+              @blur="validateField('message')"
+              :aria-invalid="errors.message ? 'true' : 'false'"
+              aria-describedby="contact-message-error"
+            ></textarea>
+            <p
+              id="contact-message-error"
+              class={errorClass}
+              x-show="errors.message"
+              x-text="errors.message"
+            />
+          </div>
+          <div>
+            <div class="flex items-start gap-3">
+              <input
+                id="contact-consent"
+                x-ref="consent"
+                x-model="values.consent"
+                type="checkbox"
+                name="consent"
+                required
+                class="mt-1 size-5 shrink-0"
+                @change="validateField('consent')"
+                :aria-invalid="errors.consent ? 'true' : 'false'"
+                aria-describedby="contact-consent-error"
+              />
+              <label
+                for="contact-consent"
+                class="[&_a]:text-primary-700 text-sm text-neutral-800 [&_a]:underline"
+              >
+                <Fragment set:html={consentHtml} />
+              </label>
+            </div>
+            <p
+              id="contact-consent-error"
+              class={errorClass}
+              x-show="errors.consent"
+              x-text="errors.consent"
+            />
+          </div>
+          <div aria-hidden="true" class="sr-only">
+            <input
+              type="text"
+              name="website"
+              tabindex="-1"
+              autocomplete="off"
+              x-model="values.website"
+            />
+          </div>
+          <button
+            type="submit"
+            :disabled="status === 'submitting'"
+            class="bg-primary-700 hover:bg-primary-800 rounded-md px-6 py-3 font-semibold text-white disabled:opacity-60"
+          >
+            <span x-show="status !== 'submitting'">{t.form.submit}</span>
+            <span x-show="status === 'submitting'" x-cloak>
+              {t.form.submitting}
+            </span>
+          </button>
+        </form>
+        <div
+          x-show="status === 'success'"
+          x-cloak
+          role="status"
+          class="rounded-md border border-green-700 bg-green-50 p-6 text-green-900"
+        >
+          <p>{t.form.success}</p>
+        </div>
+        <div
+          x-show="status === 'error'"
+          x-cloak
+          role="alert"
+          class="rounded-md border border-red-700 bg-red-50 p-6 text-red-900"
+        >
+          <p>{t.form.error}</p>
+          <button
+            type="button"
+            @click="retry"
+            class="mt-4 rounded-md bg-red-800 px-4 py-2 font-semibold text-white hover:bg-red-900"
+          >
+            {t.form.retry}
+          </button>
+        </div>
+      </div>
+    </Container>
+  </section>
+)}

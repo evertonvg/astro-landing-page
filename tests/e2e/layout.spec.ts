@@ -30,8 +30,7 @@ test('mobile menu opens, traps focus, closes on Escape and restores focus', asyn
   await expect(openButton).toBeFocused();
 });
 
-// enabled once Tasks 5-8 render sections
-test.fixme('header nav lists only enabled sections', async ({ page }) => {
+test('header nav lists only enabled sections', async ({ page }) => {
   await page.goto('/');
   const hrefs = await page
     .locator('header nav a[href^="#"]')

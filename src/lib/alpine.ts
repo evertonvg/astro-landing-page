@@ -6,6 +6,7 @@ import carousel, { heroVideo } from './carousel';
 import youtubeEmbed from './youtube-embed';
 import mobileMenu from './mobile-menu';
 import pricing from './pricing';
+import contactForm from './contact-form';
 
 // Alpine entrypoint: register plugins, then `Alpine.data()` components.
 export default (Alpine: Alpine) => {
@@ -19,4 +20,5 @@ export default (Alpine: Alpine) => {
   Alpine.data('carousel', carousel);
   Alpine.data('heroVideo', heroVideo);
   Alpine.data('youtubeEmbed', youtubeEmbed);
+  Alpine.data('contactForm', contactForm);
 };

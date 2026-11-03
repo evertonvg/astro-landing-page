@@ -1,3 +1,4 @@
+import type { FirebaseOptions } from 'firebase/app';
 import {
   PUBLIC_FIREBASE_API_KEY,
   PUBLIC_FIREBASE_AUTH_DOMAIN,
@@ -7,14 +8,6 @@ import {
   PUBLIC_GTM_ID,
   PUBLIC_USE_FIREBASE_EMULATOR,
 } from 'astro:env/client';
-
-// Structurally compatible with firebase/app FirebaseOptions (SDK is installed in a later task).
-export interface FirebaseOptions {
-  apiKey: string;
-  authDomain: string;
-  projectId: string;
-  appId: string;
-}
 
 export const firebaseOptions: FirebaseOptions = {
   apiKey: PUBLIC_FIREBASE_API_KEY,

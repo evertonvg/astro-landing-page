@@ -10,6 +10,7 @@ import Testimonials from '../components/sections/Testimonials.astro';
 import Pricing from '../components/sections/Pricing.astro';
 import Faq from '../components/sections/Faq.astro';
 import FinalCta from '../components/sections/FinalCta.astro';
+import Contact from '../components/sections/Contact.astro';
 import { renderFaqItems } from '../lib/faq';
 import { getSection } from '../lib/sections';
 import { faqPageJsonLd } from '../lib/seo';
@@ -28,5 +29,6 @@ const jsonLd = faq ? [faqPageJsonLd(renderFaqItems(faq.items))] : [];
   <Pricing />
   <Faq />
   <FinalCta />
+  <Contact />
   <Footer slot="footer" />
 </BaseLayout>

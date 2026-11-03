@@ -1,4 +1,7 @@
 minimumReleaseAge: 20160
 savePrefix: ''
 allowBuilds:
+  '@firebase/util': false
+  core-js-pure: false
+  protobufjs: false
   sharp: true
