@@ -7,11 +7,8 @@ test.describe('carousel', () => {
   test('next/prev arrows change slide', async ({ page }) => {
     await page.goto('/');
     await expect(slide(page, 1)).toHaveAttribute('data-active', 'true');
-    // Embla loads on demand, so early clicks may be no-ops until it is ready.
-    await expect(async () => {
-      await page.getByRole('button', { name: 'Próximo slide' }).click();
-      await expect(slide(page, 2)).toHaveAttribute('data-active', 'true', { timeout: 1000 });
-    }).toPass();
+    await page.getByRole('button', { name: 'Próximo slide' }).click();
+    await expect(slide(page, 2)).toHaveAttribute('data-active', 'true');
     await expect(slide(page, 2)).toHaveAttribute('aria-hidden', 'false');
     await page.getByRole('button', { name: 'Slide anterior' }).click();
     await expect(slide(page, 1)).toHaveAttribute('data-active', 'true');
@@ -19,10 +16,8 @@ test.describe('carousel', () => {
 
   test('dots navigate', async ({ page }) => {
     await page.goto('/');
-    await expect(async () => {
-      await page.getByRole('button', { name: 'Ir para o slide 3' }).click();
-      await expect(slide(page, 3)).toHaveAttribute('data-active', 'true', { timeout: 1000 });
-    }).toPass();
+    await page.getByRole('button', { name: 'Ir para o slide 3' }).click();
+    await expect(slide(page, 3)).toHaveAttribute('data-active', 'true');
   });
 
   test('pause button toggles autoplay', async ({ page }) => {
@@ -31,6 +26,23 @@ test.describe('carousel', () => {
     await expect(page.getByRole('button', { name: 'Reproduzir carrossel' })).toBeVisible();
     await expect(page.locator('#hero [aria-live]').first()).toHaveAttribute('aria-live', 'polite');
     await page.mouse.move(0, 0);
+    await page.waitForTimeout(7000 + 1000);
+    await expect(slide(page, 1)).toHaveAttribute('data-active', 'true');
+  });
+
+  test('arrow keys navigate when focus is inside the carousel', async ({ page }) => {
+    await page.goto('/');
+    await page.getByRole('button', { name: 'Próximo slide' }).focus();
+    await page.keyboard.press('ArrowRight');
+    await expect(slide(page, 2)).toHaveAttribute('data-active', 'true');
+    await page.keyboard.press('ArrowLeft');
+    await expect(slide(page, 1)).toHaveAttribute('data-active', 'true');
+  });
+
+  test('keyboard focus on a control pauses autoplay', async ({ page }) => {
+    await page.goto('/');
+    await page.mouse.move(0, 0);
+    await page.getByRole('button', { name: 'Próximo slide' }).focus();
     await page.waitForTimeout(7000 + 1000);
     await expect(slide(page, 1)).toHaveAttribute('data-active', 'true');
   });

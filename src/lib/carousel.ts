@@ -39,59 +39,99 @@ export default (cfg: CarouselConfig) => {
   let embla: EmblaCarouselType | undefined;
   let autoplay: AutoplayType | undefined;
   let userPaused = false;
+  let focusInside = false;
+  let failed = false;
+  /** Target requested before Embla finished loading; applied as the start index. */
+  let pending: number | null = null;
+
+  /** Autoplay is restarted by Embla on hover/focus-out; keep honouring pauses and focus. */
+  const holdAutoplay = () => {
+    if (userPaused || focusInside) queueMicrotask(() => autoplay?.stop());
+  };
 
   return {
     selected: 0,
     playing: canAutoplay,
     count: cfg.count,
     canAutoplay,
-    async init(this: { $refs: Record<string, HTMLElement>; selected: number }) {
-      const plugins: EmblaPluginType[] = [];
-      if (canAutoplay) {
-        const { default: Autoplay } = await import('embla-carousel-autoplay');
-        autoplay = Autoplay({
-          delay: cfg.intervalMs,
-          stopOnInteraction: false,
-          stopOnMouseEnter: true,
-          stopOnFocusIn: true,
+    async init(this: { $root: HTMLElement; $refs: Record<string, HTMLElement>; selected: number }) {
+      if (reducedMotion) {
+        // Synchronous on purpose: stop the first slide's `autoplay` video before Embla loads.
+        this.$root.querySelectorAll('video').forEach((video) => {
+          video.removeAttribute('autoplay');
+          video.pause();
         });
-        plugins.push(autoplay);
       }
-      if (cfg.transition === 'fade') {
-        const { default: Fade } = await import('embla-carousel-fade');
-        plugins.push(Fade());
+      const root = this.$root;
+      try {
+        const [Autoplay, Fade, EmblaCarousel] = await Promise.all([
+          canAutoplay ? import('embla-carousel-autoplay').then((m) => m.default) : null,
+          cfg.transition === 'fade' ? import('embla-carousel-fade').then((m) => m.default) : null,
+          import('embla-carousel').then((m) => m.default),
+        ]);
+        const plugins: EmblaPluginType[] = [];
+        if (Autoplay) {
+          autoplay = Autoplay({
+            delay: cfg.intervalMs,
+            rootNode: () => root,
+            stopOnInteraction: false,
+            stopOnMouseEnter: true,
+            stopOnFocusIn: true,
+          });
+          plugins.push(autoplay);
+        }
+        if (Fade) plugins.push(Fade());
+        embla = EmblaCarousel(
+          this.$refs.viewport,
+          { loop: true, startIndex: pending ?? 0 },
+          plugins,
+        );
+      } catch (error) {
+        if (!failed) console.error('Hero carousel failed to load', error);
+        failed = true;
+        return;
       }
-      const { default: EmblaCarousel } = await import('embla-carousel');
-      embla = EmblaCarousel(this.$refs.viewport, { loop: true }, plugins);
-      // The user may have paused while Embla was still loading.
-      if (userPaused) autoplay?.stop();
+      const api = embla;
+      pending = null;
+      if (userPaused || focusInside) autoplay?.stop();
       const sync = () => {
-        if (!embla) return;
-        this.selected = embla.selectedScrollSnap();
-        syncVideos(embla, reducedMotion);
+        this.selected = api.selectedScrollSnap();
+        syncVideos(api, reducedMotion);
       };
-      embla.on('select', sync);
-      // Hover/focus-out make Embla restart autoplay; keep honouring an explicit pause.
-      embla.on('autoplay:timerset', () => {
-        if (userPaused) queueMicrotask(() => autoplay?.stop());
-      });
+      api.on('select', sync);
+      api.on('autoplay:timerset', holdAutoplay);
       sync();
     },
-    next() {
-      embla?.scrollNext();
+    focusChange(this: { $root: HTMLElement }, event: FocusEvent) {
+      focusInside = event.type === 'focusin' || this.$root.contains(event.relatedTarget as Node);
+      if (focusInside) autoplay?.stop();
+      else if (!userPaused) autoplay?.play();
     },
-    prev() {
-      embla?.scrollPrev();
+    go(this: { selected: number }, target: number) {
+      const index = ((target % cfg.count) + cfg.count) % cfg.count;
+      if (embla) embla.scrollTo(index);
+      else {
+        pending = index;
+        this.selected = index;
+      }
     },
-    goTo(index: number) {
-      embla?.scrollTo(index);
+    next(this: { selected: number; go(i: number): void }) {
+      this.go((pending ?? this.selected) + 1);
+    },
+    prev(this: { selected: number; go(i: number): void }) {
+      this.go((pending ?? this.selected) - 1);
+    },
+    goTo(this: { go(i: number): void }, index: number) {
+      this.go(index);
     },
     togglePlay() {
       if (!canAutoplay) return;
       userPaused = this.playing;
       this.playing = !this.playing;
-      if (this.playing) autoplay?.play();
-      else autoplay?.stop();
+      if (this.playing) {
+        focusInside = false; // an explicit "play" overrides focus-based pausing
+        autoplay?.play();
+      } else autoplay?.stop();
     },
     destroy() {
       embla?.destroy();
