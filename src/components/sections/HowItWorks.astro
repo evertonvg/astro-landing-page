@@ -1,0 +1,35 @@
+---
+import { getSection } from '../../lib/sections';
+import Container from '../ui/Container.astro';
+import SectionHeading from '../ui/SectionHeading.astro';
+
+const data = await getSection('how-it-works');
+---
+
+{data && (
+  <section
+    id="como-funciona"
+    aria-labelledby="como-funciona-title"
+    class="bg-neutral-50 py-16 sm:py-24"
+  >
+    <Container>
+      <SectionHeading id="como-funciona-title" title={data.title} />
+      <ol class="mt-12 grid gap-8 md:grid-cols-3">
+        {data.steps.map((step, index) => (
+          <li class="flex gap-4">
+            <span
+              class="bg-primary-700 inline-flex size-10 shrink-0 items-center justify-center rounded-full font-bold text-white"
+              aria-hidden="true"
+            >
+              {index + 1}
+            </span>
+            <div>
+              <h3 class="font-display text-lg font-semibold text-neutral-900">{step.title}</h3>
+              <p class="mt-2 text-neutral-600">{step.description}</p>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </Container>
+  </section>
+)}

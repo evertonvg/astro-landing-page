@@ -2,10 +2,30 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/layout/Header.astro';
 import Footer from '../components/layout/Footer.astro';
+import Logos from '../components/sections/Logos.astro';
+import Features from '../components/sections/Features.astro';
+import HowItWorks from '../components/sections/HowItWorks.astro';
+import Testimonials from '../components/sections/Testimonials.astro';
+import Pricing from '../components/sections/Pricing.astro';
+import Faq from '../components/sections/Faq.astro';
+import FinalCta from '../components/sections/FinalCta.astro';
+import { renderFaqItems } from '../lib/faq';
+import { getSection } from '../lib/sections';
+import { faqPageJsonLd } from '../lib/seo';
+
+const faq = await getSection('faq');
+const jsonLd = faq ? [faqPageJsonLd(renderFaqItems(faq.items))] : [];
 ---
 
-<BaseLayout title="Início">
+<BaseLayout title="Início" jsonLd={jsonLd}>
   <Header slot="header" />
-  <h1>Landing page</h1>
+  <h1 class="sr-only">Landing page</h1>
+  <Logos />
+  <Features />
+  <HowItWorks />
+  <Testimonials />
+  <Pricing />
+  <Faq />
+  <FinalCta />
   <Footer slot="footer" />
 </BaseLayout>

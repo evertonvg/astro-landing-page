@@ -1,0 +1,44 @@
+---
+import { Icon } from 'astro-icon/components';
+import { renderFaqItems } from '../../lib/faq';
+import { getSection } from '../../lib/sections';
+import Container from '../ui/Container.astro';
+import SectionHeading from '../ui/SectionHeading.astro';
+
+const data = await getSection('faq');
+const items = data ? renderFaqItems(data.items) : [];
+---
+
+{data && (
+  <section id="faq" aria-labelledby="faq-title" class="py-16 sm:py-24">
+    <Container class="max-w-3xl">
+      <SectionHeading id="faq-title" title={data.title} />
+      <div x-data class="mt-12 divide-y divide-neutral-200 border-y border-neutral-200">
+        {items.map((item) => (
+          <div x-disclosure>
+            <h3>
+              <button
+                x-disclosure:button
+                class="focus-visible:outline-primary-700 flex w-full items-center justify-between gap-4 py-5 text-left text-lg font-semibold text-neutral-900 focus-visible:outline-2 focus-visible:-outline-offset-2"
+              >
+                {item.question}
+                <Icon
+                  name="lucide:chevron-down"
+                  class="size-5 shrink-0 transition-transform"
+                  x-bind:class="$disclosure.isOpen && 'rotate-180'"
+                  aria-hidden="true"
+                />
+              </button>
+            </h3>
+            <div x-disclosure:panel x-collapse x-cloak>
+              <div
+                class="[&_a]:text-primary-700 pb-5 text-neutral-700 [&_a]:underline"
+                set:html={item.answerHtml}
+              />
+            </div>
+          </div>
+        ))}
+      </div>
+    </Container>
+  </section>
+)}

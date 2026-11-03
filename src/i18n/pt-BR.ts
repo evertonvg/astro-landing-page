@@ -20,6 +20,13 @@ export const t = {
     accept: 'Aceitar',
     reject: 'Recusar',
   },
+  pricing: {
+    popular: 'Mais popular',
+    billingYearly: 'Cobrança anual',
+    perMonth: '/mês',
+    perYear: '/ano',
+    savings: (percent: number) => `Economize ${percent}%`,
+  },
   common: {
     skipToContent: 'Pular para o conteúdo',
     cookiePreferences: 'Preferências de cookies',

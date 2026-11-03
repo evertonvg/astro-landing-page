@@ -1,0 +1,32 @@
+---
+import { Image } from 'astro:assets';
+import { getSection } from '../../lib/sections';
+import Container from '../ui/Container.astro';
+
+const data = await getSection('logos');
+---
+
+{data && (
+  <section id="clientes" aria-labelledby="clientes-title" class="py-12 sm:py-16">
+    <Container>
+      <h2
+        id="clientes-title"
+        class="text-center text-sm font-semibold tracking-wide text-neutral-600 uppercase"
+      >
+        {data.title}
+      </h2>
+      <ul class="mt-8 grid grid-cols-2 items-center gap-8 sm:grid-cols-3 lg:grid-cols-6">
+        {data.items.map((item) => (
+          <li class="flex justify-center">
+            <Image
+              src={item.image}
+              alt={item.name}
+              height={48}
+              class="h-12 w-auto opacity-70 grayscale transition hover:opacity-100 hover:grayscale-0"
+            />
+          </li>
+        ))}
+      </ul>
+    </Container>
+  </section>
+)}

@@ -1,0 +1,96 @@
+---
+import { Icon } from 'astro-icon/components';
+import { t } from '../../i18n/pt-BR';
+import { formatPrice, yearlySavingsPercent } from '../../lib/pricing';
+import { getSection } from '../../lib/sections';
+import Button from '../ui/Button.astro';
+import Container from '../ui/Container.astro';
+import SectionHeading from '../ui/SectionHeading.astro';
+
+const data = await getSection('pricing');
+---
+
+{data && (
+  <section
+    id="precos"
+    aria-labelledby="precos-title"
+    class="bg-neutral-50 py-16 sm:py-24"
+    x-data="pricing"
+  >
+    <Container>
+      <SectionHeading id="precos-title" title={data.title} subtitle={data.subtitle} />
+      {data.billingToggle && (
+        <div x-switch:group class="mt-8 flex items-center justify-center gap-3">
+          <button
+            x-switch
+            x-model="yearly"
+            class="group focus-visible:outline-primary-700 aria-checked:bg-primary-700 relative inline-flex h-7 w-12 shrink-0 cursor-pointer items-center rounded-full bg-neutral-500 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2"
+          >
+            <span class="pointer-events-none inline-block size-5 translate-x-1 rounded-full bg-white shadow transition-transform group-aria-checked:translate-x-6" />
+          </button>
+          <span x-switch:label class="cursor-pointer font-medium text-neutral-900">
+            {t.pricing.billingYearly}
+          </span>
+        </div>
+      )}
+      <div class="mt-12 grid gap-6 lg:grid-cols-3">
+        {data.plans.map((plan) => {
+          const yearly = data.billingToggle ? plan.priceYearly : undefined;
+          const showYearly = yearly !== undefined;
+          const savings = showYearly ? yearlySavingsPercent(plan.priceMonthly, yearly) : 0;
+          return (
+            <article
+              class:list={[
+                'rounded-card shadow-card relative flex flex-col bg-white p-8',
+                plan.highlighted && 'ring-primary-700 ring-2',
+              ]}
+            >
+              {plan.highlighted && (
+                <span class="bg-primary-700 absolute -top-3 left-8 rounded-full px-3 py-1 text-xs font-semibold text-white">
+                  {t.pricing.popular}
+                </span>
+              )}
+              <h3 class="font-display text-xl font-semibold text-neutral-900">{plan.name}</h3>
+              <p class="mt-4 flex flex-wrap items-baseline gap-1">
+                <span x-show={showYearly ? '!yearly' : undefined}>
+                  <span class="text-4xl font-bold text-neutral-900">
+                    {formatPrice(plan.priceMonthly)}
+                  </span>
+                  <span class="text-neutral-600">{t.pricing.perMonth}</span>
+                </span>
+                {showYearly && (
+                  <span x-show="yearly" x-cloak>
+                    <span class="text-4xl font-bold text-neutral-900">{formatPrice(yearly)}</span>
+                    <span class="text-neutral-600">{t.pricing.perYear}</span>
+                  </span>
+                )}
+              </p>
+              {savings > 0 && (
+                <p x-show="yearly" x-cloak class="mt-2">
+                  <span class="bg-secondary-100 text-secondary-900 rounded-full px-3 py-1 text-xs font-semibold">
+                    {t.pricing.savings(savings)}
+                  </span>
+                </p>
+              )}
+              <ul class="mt-6 flex-1 space-y-3">
+                {plan.features.map((feature) => (
+                  <li class="flex items-start gap-2 text-neutral-800">
+                    <Icon
+                      name="lucide:check"
+                      class="text-secondary-700 mt-0.5 size-5 shrink-0"
+                      aria-hidden="true"
+                    />
+                    {feature}
+                  </li>
+                ))}
+              </ul>
+              <Button href={plan.cta.href} variant={plan.cta.variant} class="mt-8">
+                {plan.cta.label}
+              </Button>
+            </article>
+          );
+        })}
+      </div>
+    </Container>
+  </section>
+)}

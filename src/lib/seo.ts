@@ -34,3 +34,8 @@ export function faqPageJsonLd(items: { question: string; answerText: string }[])
     })),
   };
 }
+
+/** Serializes JSON-LD for inline `<script>`: escapes `<` so content can never close the tag. */
+export function serializeJsonLd(data: object): string {
+  return JSON.stringify(data).replace(/</g, String.raw`\u003c`);
+}

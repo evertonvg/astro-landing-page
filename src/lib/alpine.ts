@@ -3,6 +3,7 @@ import collapse from '@alpinejs/collapse';
 import focus from '@alpinejs/focus';
 import ui from '@alpinejs/ui';
 import mobileMenu from './mobile-menu';
+import pricing from './pricing';
 
 // Alpine entrypoint: register plugins, then `Alpine.data()` components.
 export default (Alpine: Alpine) => {
@@ -12,4 +13,5 @@ export default (Alpine: Alpine) => {
   Alpine.plugin(collapse);
 
   Alpine.data('mobileMenu', mobileMenu);
+  Alpine.data('pricing', pricing);
 };

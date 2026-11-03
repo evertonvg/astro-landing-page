@@ -1,5 +1,10 @@
 import { describe, it, expect } from 'vitest';
-import { organizationJsonLd, websiteJsonLd, faqPageJsonLd } from '../../src/lib/seo';
+import {
+  organizationJsonLd,
+  websiteJsonLd,
+  faqPageJsonLd,
+  serializeJsonLd,
+} from '../../src/lib/seo';
 
 const s = {
   name: 'Sua Empresa',
@@ -31,5 +36,11 @@ describe('seo', () => {
       name: 'P?',
       acceptedAnswer: { '@type': 'Answer', text: 'R.' },
     });
+  });
+  it('serializeJsonLd never emits a literal "<" (script breakout)', () => {
+    const out = serializeJsonLd({ text: '</script><script>alert(1)</script>' });
+    expect(out).not.toContain('<');
+    expect(out).not.toContain('</script>');
+    expect(JSON.parse(out)).toEqual({ text: '</script><script>alert(1)</script>' });
   });
 });

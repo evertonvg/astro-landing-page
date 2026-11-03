@@ -1,0 +1,44 @@
+---
+import { Image } from 'astro:assets';
+import { getSection } from '../../lib/sections';
+import Container from '../ui/Container.astro';
+import SectionHeading from '../ui/SectionHeading.astro';
+
+const data = await getSection('testimonials');
+---
+
+{data && (
+  <section id="depoimentos" aria-labelledby="depoimentos-title" class="py-16 sm:py-24">
+    <Container>
+      <SectionHeading id="depoimentos-title" title={data.title} />
+      <ul class="mt-12 grid gap-6 md:grid-cols-3">
+        {data.items.map((item) => (
+          <li>
+            <figure class="rounded-card shadow-card flex h-full flex-col bg-white p-6">
+              <blockquote class="flex-1 text-neutral-800">
+                <p>“{item.quote}”</p>
+              </blockquote>
+              <figcaption class="mt-6 flex items-center gap-3">
+                {item.avatar && (
+                  <Image
+                    src={item.avatar}
+                    alt=""
+                    width={48}
+                    height={48}
+                    class="size-12 rounded-full object-cover"
+                  />
+                )}
+                <span>
+                  <span class="block font-semibold text-neutral-900">{item.name}</span>
+                  <span class="block text-sm text-neutral-600">
+                    {item.role}, {item.company}
+                  </span>
+                </span>
+              </figcaption>
+            </figure>
+          </li>
+        ))}
+      </ul>
+    </Container>
+  </section>
+)}
