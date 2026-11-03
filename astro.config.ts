@@ -1,5 +1,6 @@
 import { defineConfig, envField } from 'astro/config';
 import { loadEnv } from 'vite';
+import icon from 'astro-icon';
 import alpinejs from '@astrojs/alpinejs';
 import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
@@ -21,7 +22,7 @@ export default defineConfig({
   // Empty -> undefined so the env schema below reports the missing variable by name.
   site: env.PUBLIC_SITE_URL || undefined,
   output: 'static',
-  integrations: [alpinejs({ entrypoint: '/src/lib/alpine' }), sitemap()],
+  integrations: [alpinejs({ entrypoint: '/src/lib/alpine' }), sitemap(), icon()],
   vite: {
     plugins: [tailwindcss()],
   },

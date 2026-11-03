@@ -3,6 +3,8 @@ export const t = {
     label: 'Navegação principal',
     openMenu: 'Abrir menu',
     closeMenu: 'Fechar menu',
+    mobileLabel: 'Menu',
+    homeLabel: 'Ir para o início',
   },
   carousel: {
     label: 'Carrossel',
@@ -20,5 +22,8 @@ export const t = {
   },
   common: {
     skipToContent: 'Pular para o conteúdo',
+    cookiePreferences: 'Preferências de cookies',
+    socialLabel: 'Redes sociais',
+    footerLabel: 'Rodapé',
   },
 } as const;

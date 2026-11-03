@@ -1,0 +1,54 @@
+---
+import { t } from '../../i18n/pt-BR';
+import { Icon } from 'astro-icon/components';
+import Button from '../ui/Button.astro';
+import type { HeaderLink } from '../../lib/sections';
+
+interface Props {
+  links: HeaderLink[];
+  cta?: { label: string; href: string };
+}
+
+const { links, cta } = Astro.props;
+---
+
+<div x-dialog x-model="open" x-cloak class="fixed inset-0 z-50 md:hidden">
+  <div x-dialog:overlay class="fixed inset-0 bg-neutral-900/50"></div>
+  <div class="fixed inset-y-0 right-0 flex w-full max-w-sm">
+    <div x-dialog:panel class="flex w-full flex-col gap-6 overflow-y-auto bg-white p-6 shadow-card">
+      <div class="flex items-center justify-between">
+        <span x-dialog:title class="font-display text-lg font-bold">
+          {t.nav.mobileLabel}
+        </span>
+        <button
+          type="button"
+          class="inline-flex size-11 items-center justify-center rounded-lg text-neutral-800 hover:bg-neutral-100"
+          aria-label={t.nav.closeMenu}
+          @click="close"
+        >
+          <Icon name="lucide:x" class="size-6" aria-hidden="true" />
+        </button>
+      </div>
+      <nav aria-label={t.nav.mobileLabel}>
+        <ul class="flex flex-col gap-1">
+          {links.map((link) => (
+            <li>
+              <a
+                href={link.href}
+                class="block rounded-lg px-3 py-3 text-lg font-medium text-neutral-900 hover:bg-neutral-100"
+                @click="close"
+              >
+                {link.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+      {cta && (
+        <Button href={cta.href} size="lg" @click="close">
+          {cta.label}
+        </Button>
+      )}
+    </div>
+  </div>
+</div>

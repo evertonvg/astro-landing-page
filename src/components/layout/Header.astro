@@ -1,0 +1,62 @@
+---
+import { Image } from 'astro:assets';
+import { Icon } from 'astro-icon/components';
+import { t } from '../../i18n/pt-BR';
+import { buildNav, enabledSections, getSection } from '../../lib/sections';
+import Button from '../ui/Button.astro';
+import Container from '../ui/Container.astro';
+import MobileMenu from './MobileMenu.astro';
+
+const header = await getSection('header');
+if (!header) throw new Error('Missing header section content (src/content/sections/header.yaml)');
+
+const links = buildNav(header.links, await enabledSections());
+---
+
+<header class="sticky top-0 z-40 border-b border-neutral-200 bg-white">
+  <Container class="flex h-16 items-center justify-between gap-6">
+    <div x-data="mobileMenu" class="contents">
+      <a
+        href="/"
+        class="flex shrink-0 items-center"
+        aria-label={`${header.logoAlt} - ${t.nav.homeLabel}`}
+      >
+        <Image src={header.logo} alt="" height={40} loading="eager" class="h-10 w-auto" />
+      </a>
+
+      <nav aria-label={t.nav.label} class="hidden md:block">
+        <ul class="flex items-center gap-1">
+          {links.map((link) => (
+            <li>
+              <a
+                href={link.href}
+                class="rounded-lg px-3 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-100 hover:text-neutral-900"
+              >
+                {link.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+
+      <div class="flex items-center gap-2">
+        {header.cta && (
+          <Button href={header.cta.href} variant={header.cta.variant} class="hidden md:inline-flex">
+            {header.cta.label}
+          </Button>
+        )}
+        <button
+          type="button"
+          class="inline-flex size-11 items-center justify-center rounded-lg text-neutral-800 hover:bg-neutral-100 md:hidden"
+          aria-label={t.nav.openMenu}
+          aria-haspopup="dialog"
+          @click="open = true"
+        >
+          <Icon name="lucide:menu" class="size-6" aria-hidden="true" />
+        </button>
+      </div>
+
+      <MobileMenu links={links} cta={header.cta} />
+    </div>
+  </Container>
+</header>
