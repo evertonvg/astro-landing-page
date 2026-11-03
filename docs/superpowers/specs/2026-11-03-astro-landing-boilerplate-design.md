@@ -20,27 +20,27 @@ Boilerplate reutilizável de landing page para clientes. Para cada novo cliente,
 
 ## 2. Decisões
 
-| Tema | Decisão |
-|---|---|
-| Propósito | Boilerplate reutilizável para clientes |
-| Framework | Astro 7.x, `output: 'static'`, TypeScript `strict` |
-| Interatividade | Alpine.js via `@astrojs/alpinejs` + `@alpinejs/ui`, `@alpinejs/focus`, `@alpinejs/collapse` |
-| Estilo | Tailwind CSS v4 (`@tailwindcss/vite`), tokens em `@theme`; fontes self-hosted via Fontsource |
-| Dark mode | Não (tokens preparados para adicionar depois) |
-| Idiomas | Somente pt-BR, textos de UI centralizados em `src/i18n/pt-BR.ts` |
-| Conteúdo | Astro Content Collections (YAML) com schemas Zod + `site.config.ts` |
-| Ícones | `astro-icon` + Iconify (Lucide) |
-| Carrossel | Embla Carousel (+ plugins autoplay e fade) |
-| Formulário | Campos nome, e-mail, telefone (opcional, máscara BR via IMask), assunto (select), mensagem, consentimento LGPD; validação Zod |
-| Backend do form | Firestore direto do navegador (SDK modular carregado sob demanda) |
-| Antispam | Honeypot + Firestore Security Rules estritas + Firebase App Check (reCAPTCHA v3) |
-| Pós-envio | Apenas grava; notificação por e-mail documentada (extensão Trigger Email) |
-| Cookies | `vanilla-cookieconsent` v3 + Google Tag Manager com Consent Mode v2 |
-| Hospedagem | AWS S3 + CloudFront (OAC), deploy via GitHub Actions com OIDC |
-| Infra AWS | Criada manualmente pelo usuário, documentada em `docs/aws-setup.md` |
-| Testes | Vitest, testes de Firestore Rules (emulator), Playwright E2E + axe, Lighthouse CI |
-| Repositório | pnpm, Husky, lint-staged, commitlint (inglês), Dependabot, release-please |
-| Abordagem de JS | **Ilhas sob demanda**: Firebase via `import()` dinâmico; Embla só quando há 2+ slides |
+| Tema            | Decisão                                                                                                                       |
+| --------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| Propósito       | Boilerplate reutilizável para clientes                                                                                        |
+| Framework       | Astro 7.x, `output: 'static'`, TypeScript `strict`                                                                            |
+| Interatividade  | Alpine.js via `@astrojs/alpinejs` + `@alpinejs/ui`, `@alpinejs/focus`, `@alpinejs/collapse`                                   |
+| Estilo          | Tailwind CSS v4 (`@tailwindcss/vite`), tokens em `@theme`; fontes self-hosted via Fontsource                                  |
+| Dark mode       | Não (tokens preparados para adicionar depois)                                                                                 |
+| Idiomas         | Somente pt-BR, textos de UI centralizados em `src/i18n/pt-BR.ts`                                                              |
+| Conteúdo        | Astro Content Collections (YAML) com schemas Zod + `site.config.ts`                                                           |
+| Ícones          | `astro-icon` + Iconify (Lucide)                                                                                               |
+| Carrossel       | Embla Carousel (+ plugins autoplay e fade)                                                                                    |
+| Formulário      | Campos nome, e-mail, telefone (opcional, máscara BR via IMask), assunto (select), mensagem, consentimento LGPD; validação Zod |
+| Backend do form | Firestore direto do navegador (SDK modular carregado sob demanda)                                                             |
+| Antispam        | Honeypot + Firestore Security Rules estritas + Firebase App Check (reCAPTCHA v3)                                              |
+| Pós-envio       | Apenas grava; notificação por e-mail documentada (extensão Trigger Email)                                                     |
+| Cookies         | `vanilla-cookieconsent` v3 + Google Tag Manager com Consent Mode v2                                                           |
+| Hospedagem      | AWS S3 + CloudFront (OAC), deploy via GitHub Actions com OIDC                                                                 |
+| Infra AWS       | Criada manualmente pelo usuário, documentada em `docs/aws-setup.md`                                                           |
+| Testes          | Vitest, testes de Firestore Rules (emulator), Playwright E2E + axe, Lighthouse CI                                             |
+| Repositório     | pnpm, Husky, lint-staged, commitlint (inglês), Dependabot, release-please                                                     |
+| Abordagem de JS | **Ilhas sob demanda**: Firebase via `import()` dinâmico; Embla só quando há 2+ slides                                         |
 
 ## 3. Arquitetura e estrutura
 
@@ -113,22 +113,23 @@ Cada seção corresponde a um arquivo YAML em `src/content/`, validado por schem
 ```yaml
 enabled: true
 autoplay: { enabled: true, intervalMs: 7000 }
-transition: fade            # fade | slide
+transition: fade # fade | slide
 slides:
   - background:
-      type: image           # image | video | youtube
+      type: image # image | video | youtube
       src: ../assets/hero/slide-1.jpg
-      alt: "Descrição da imagem"
-    overlay: 0.45           # 0–0.9
-    align: left             # left | center | right
-    title: "Título principal"
-    description: "Subtítulo"
-    buttons:                # 0 a 2
-      - { label: "Comece agora", href: "#contato", variant: primary }
-      - { label: "Saiba mais", href: "#features", variant: secondary }
+      alt: 'Descrição da imagem'
+    overlay: 0.45 # 0–0.9
+    align: left # left | center | right
+    title: 'Título principal'
+    description: 'Subtítulo'
+    buttons: # 0 a 2
+      - { label: 'Comece agora', href: '#contato', variant: primary }
+      - { label: 'Saiba mais', href: '#features', variant: secondary }
 ```
 
 Regras do schema:
+
 - `slides`: mínimo 1.
 - `background` é união discriminada por `type`:
   - `image`: `src` (imagem), `alt` obrigatórios.
@@ -139,25 +140,26 @@ Regras do schema:
 - `align`: padrão `center`.
 
 Comportamento:
+
 - 1 slide → hero estático, sem carregar Embla.
 - 2+ slides → carrossel.
 - Primeiro slide com `loading="eager"` e `fetchpriority="high"` (LCP); demais lazy.
 
 ### Demais seções
 
-| Arquivo | Campos principais |
-|---|---|
-| `header.yaml` | logo, links de navegação (âncoras), CTA |
-| `logos.yaml` | `enabled`, título, itens `{ name, image }` |
-| `features.yaml` | `enabled`, título, subtítulo, itens `{ icon, title, description }` |
-| `how-it-works.yaml` | `enabled`, título, passos `{ title, description }` |
-| `testimonials.yaml` | `enabled`, título, itens `{ quote, name, role, company, avatar? }` |
-| `pricing.yaml` | `enabled`, título, `billingToggle`, planos `{ name, priceMonthly, priceYearly?, features[], highlighted, cta }` |
-| `faq.yaml` | `enabled`, título, itens `{ question, answer }` (answer em Markdown) |
-| `cta.yaml` | `enabled`, título, descrição, botões (0–2) |
-| `contact.yaml` | `enabled`, título, descrição, opções de assunto, texto do consentimento |
-| `footer.yaml` | colunas de links, redes sociais, copyright |
-| `legal/privacidade.md`, `legal/termos.md` | Markdown; a tabela de cookies é injetada a partir de `consent.ts` |
+| Arquivo                                   | Campos principais                                                                                               |
+| ----------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| `header.yaml`                             | logo, links de navegação (âncoras), CTA                                                                         |
+| `logos.yaml`                              | `enabled`, título, itens `{ name, image }`                                                                      |
+| `features.yaml`                           | `enabled`, título, subtítulo, itens `{ icon, title, description }`                                              |
+| `how-it-works.yaml`                       | `enabled`, título, passos `{ title, description }`                                                              |
+| `testimonials.yaml`                       | `enabled`, título, itens `{ quote, name, role, company, avatar? }`                                              |
+| `pricing.yaml`                            | `enabled`, título, `billingToggle`, planos `{ name, priceMonthly, priceYearly?, features[], highlighted, cta }` |
+| `faq.yaml`                                | `enabled`, título, itens `{ question, answer }` (answer em Markdown)                                            |
+| `cta.yaml`                                | `enabled`, título, descrição, botões (0–2)                                                                      |
+| `contact.yaml`                            | `enabled`, título, descrição, opções de assunto, texto do consentimento                                         |
+| `footer.yaml`                             | colunas de links, redes sociais, copyright                                                                      |
+| `legal/privacidade.md`, `legal/termos.md` | Markdown; a tabela de cookies é injetada a partir de `consent.ts`                                               |
 
 ### `site.config.ts`
 
@@ -169,14 +171,14 @@ Páginas: `/` (todas as seções), `/privacidade`, `/termos`, `404`.
 
 Ordem das seções em `/`: Header → Hero → Logos → Features → Como funciona → Depoimentos → Pricing → FAQ → CTA final → Contato → Footer. Banner de cookies sobreposto.
 
-| Componente | Implementação |
-|---|---|
-| Menu mobile | `x-dialog` do `@alpinejs/ui` (focus trap, Esc fecha, foco retorna ao botão) |
-| Toggle mensal/anual (pricing) | `x-switch` do `@alpinejs/ui` |
-| FAQ | `x-disclosure` do `@alpinejs/ui` + `x-collapse` |
-| Carrossel | componente Alpine `carousel` encapsulando Embla |
-| Formulário | componente Alpine `contactForm` |
-| Banner de cookies | `vanilla-cookieconsent` |
+| Componente                    | Implementação                                                               |
+| ----------------------------- | --------------------------------------------------------------------------- |
+| Menu mobile                   | `x-dialog` do `@alpinejs/ui` (focus trap, Esc fecha, foco retorna ao botão) |
+| Toggle mensal/anual (pricing) | `x-switch` do `@alpinejs/ui`                                                |
+| FAQ                           | `x-disclosure` do `@alpinejs/ui` + `x-collapse`                             |
+| Carrossel                     | componente Alpine `carousel` encapsulando Embla                             |
+| Formulário                    | componente Alpine `contactForm`                                             |
+| Banner de cookies             | `vanilla-cookieconsent`                                                     |
 
 ### Carrossel
 
@@ -205,14 +207,14 @@ Ordem das seções em `/`: Header → Hero → Logos → Features → Como funci
 
 ### Schema do formulário (`contact-schema.ts`)
 
-| Campo | Regra |
-|---|---|
-| `name` | string trim, 2–100 |
-| `email` | e-mail válido, máx. 254 |
-| `phone` | opcional; dígitos 10–11 (armazenado apenas como dígitos ou `null`) |
-| `subject` | um dos valores de `contact.yaml` |
-| `message` | string trim, 10–2000 |
-| `consent` | literal `true` |
+| Campo     | Regra                                                              |
+| --------- | ------------------------------------------------------------------ |
+| `name`    | string trim, 2–100                                                 |
+| `email`   | e-mail válido, máx. 254                                            |
+| `phone`   | opcional; dígitos 10–11 (armazenado apenas como dígitos ou `null`) |
+| `subject` | um dos valores de `contact.yaml`                                   |
+| `message` | string trim, 10–2000                                               |
+| `consent` | literal `true`                                                     |
 
 ### Documento Firestore — `contacts/{autoId}`
 
@@ -318,6 +320,7 @@ Ordem das seções em `/`: Header → Hero → Logos → Features → Como funci
 
 - GitHub Environment `production` (aprovação manual opcional, configurável pelo usuário).
 - Permissões: `id-token: write`, `contents: read`.
+
 1. Gera `.env` a partir de `vars.*` do environment (`PUBLIC_*`).
 2. `pnpm build`.
 3. `aws-actions/configure-aws-credentials` com `role-to-assume: ${{ vars.AWS_ROLE_ARN }}` e `aws-region: ${{ vars.AWS_REGION }}`.
@@ -338,15 +341,15 @@ Ordem das seções em `/`: Header → Hero → Logos → Features → Como funci
 
 Validadas via `astro:env` (schema em `astro.config.ts`); build falha se obrigatória ausente.
 
-| Variável | Obrigatória |
-|---|---|
-| `PUBLIC_SITE_URL` | sim |
-| `PUBLIC_FIREBASE_API_KEY` | sim |
-| `PUBLIC_FIREBASE_AUTH_DOMAIN` | sim |
-| `PUBLIC_FIREBASE_PROJECT_ID` | sim |
-| `PUBLIC_FIREBASE_APP_ID` | sim |
-| `PUBLIC_RECAPTCHA_SITE_KEY` | sim |
-| `PUBLIC_GTM_ID` | não |
+| Variável                       | Obrigatória          |
+| ------------------------------ | -------------------- |
+| `PUBLIC_SITE_URL`              | sim                  |
+| `PUBLIC_FIREBASE_API_KEY`      | sim                  |
+| `PUBLIC_FIREBASE_AUTH_DOMAIN`  | sim                  |
+| `PUBLIC_FIREBASE_PROJECT_ID`   | sim                  |
+| `PUBLIC_FIREBASE_APP_ID`       | sim                  |
+| `PUBLIC_RECAPTCHA_SITE_KEY`    | sim                  |
+| `PUBLIC_GTM_ID`                | não                  |
 | `PUBLIC_USE_FIREBASE_EMULATOR` | não (padrão `false`) |
 
 GitHub Environment `production` também contém: `AWS_ROLE_ARN`, `AWS_REGION`, `S3_BUCKET`, `CLOUDFRONT_DISTRIBUTION_ID`.
@@ -377,6 +380,7 @@ GitHub Environment `production` também contém: `AWS_ROLE_ARN`, `AWS_REGION`, `
 ### Firestore Rules (`tests/rules/`)
 
 `@firebase/rules-unit-testing` contra o emulator:
+
 - `create` válido passa;
 - falham: chave extra, chave faltando, tipo errado, tamanho excedido, `consent: false`, `createdAt` forjado, `subject` fora da lista;
 - falham: `read`, `update`, `delete`, escrita em outra coleção.
@@ -384,6 +388,7 @@ GitHub Environment `production` também contém: `AWS_ROLE_ARN`, `AWS_REGION`, `
 ### Playwright (`tests/e2e/`)
 
 Chromium, viewports 1280 e 390:
+
 - Formulário: erros inline, envio bem-sucedido, documento verificado no emulator via REST.
 - Carrossel: setas, dots, pausa; sem autoplay com `reducedMotion: 'reduce'`; YouTube exibe poster sem consentimento de Mídia.
 - Menu mobile: abre, prende foco, fecha com Esc, foco retorna.
@@ -399,6 +404,7 @@ Chromium, viewports 1280 e 390:
 ## 15. Fora do escopo
 
 Documentado no README como próximos passos:
+
 - Notificação por e-mail (extensão Trigger Email).
 - Rate limiting via Cloud Function.
 - i18n completo.

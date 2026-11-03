@@ -45,44 +45,46 @@
 
 ## File Map
 
-| Path | Responsibility | Task |
-|---|---|---|
-| `package.json`, `pnpm-workspace.yaml`, `.nvmrc`, `.editorconfig`, `.gitignore`, `.gitattributes` | project + package manager | 1 |
-| `eslint.config.js`, `prettier.config.js`, `.prettierignore`, `commitlint.config.js`, `.husky/*`, `.vscode/*` | code quality tooling | 1 |
-| `astro.config.ts`, `tsconfig.json`, `src/env.d.ts` | Astro config, env schema, types | 1, 2 |
-| `vitest.config.ts` | unit test runner | 2 |
-| `src/site.config.ts` | global site data | 2 |
-| `src/i18n/pt-BR.ts` | UI dictionary | 2 |
-| `src/lib/env.ts` | typed env accessors | 2 |
-| `src/lib/seo.ts` | JSON-LD builders | 2 |
-| `src/layouts/BaseLayout.astro`, `src/components/seo/*`, `src/components/layout/SkipLink.astro` | document shell + SEO | 2 |
-| `public/robots.txt`, `public/site.webmanifest`, `public/favicon*` | static SEO assets | 2 |
-| `src/content/schemas.ts` | Zod schema factories per section | 3 |
-| `src/content.config.ts` | collections wiring | 3 |
-| `src/content/sections/*.yaml`, `src/assets/**` | sample content | 3 |
-| `src/lib/sections.ts` | `getSection`, `buildNav` | 3 |
-| `src/styles/global.css` | Tailwind + `@theme` tokens | 4 |
-| `src/lib/alpine.ts`, `src/types/alpinejs-ui.d.ts` | Alpine entrypoint | 4 |
-| `src/components/ui/*` | Button, Container, SectionHeading | 4 |
-| `src/components/layout/{Header,MobileMenu,Footer}.astro` | chrome | 4 |
-| `playwright.config.ts`, `tests/e2e/fixtures.ts` | E2E runner + axe helper | 4 |
-| `src/components/sections/{Logos,Features,HowItWorks,Testimonials,Pricing,Faq,FinalCta}.astro`, `src/lib/pricing.ts` | static sections | 5 |
-| `src/lib/consent.ts`, `src/components/layout/{CookieConsent,GtmHead,GtmBody}.astro` | consent + GTM | 6 |
-| `src/lib/carousel.ts`, `src/lib/youtube-embed.ts`, `src/components/sections/Hero.astro`, `src/components/hero/*` | hero | 7 |
-| `src/lib/contact-schema.ts`, `src/lib/contact-form.ts`, `src/lib/firebase.ts`, `src/components/sections/Contact.astro` | contact form | 8 |
-| `firebase/*`, `tests/rules/*`, `.env.test`, `.env.example` | rules + emulator | 9 |
-| `src/pages/{privacidade,termos,404}.astro`, `src/pages/og/[...route].ts`, `src/components/legal/CookieTable.astro`, `src/content/legal/*.md` | legal + OG | 10 |
-| `.github/workflows/ci.yml`, `lighthouserc.json` | CI | 11 |
-| `.github/workflows/{deploy,release}.yml`, `.github/dependabot.yml`, templates, `docs/*.md`, `README.md`, `CONTRIBUTING.md` | delivery + docs | 12 |
+| Path                                                                                                                                         | Responsibility                    | Task |
+| -------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------- | ---- |
+| `package.json`, `pnpm-workspace.yaml`, `.nvmrc`, `.editorconfig`, `.gitignore`, `.gitattributes`                                             | project + package manager         | 1    |
+| `eslint.config.js`, `prettier.config.js`, `.prettierignore`, `commitlint.config.js`, `.husky/*`, `.vscode/*`                                 | code quality tooling              | 1    |
+| `astro.config.ts`, `tsconfig.json`, `src/env.d.ts`                                                                                           | Astro config, env schema, types   | 1, 2 |
+| `vitest.config.ts`                                                                                                                           | unit test runner                  | 2    |
+| `src/site.config.ts`                                                                                                                         | global site data                  | 2    |
+| `src/i18n/pt-BR.ts`                                                                                                                          | UI dictionary                     | 2    |
+| `src/lib/env.ts`                                                                                                                             | typed env accessors               | 2    |
+| `src/lib/seo.ts`                                                                                                                             | JSON-LD builders                  | 2    |
+| `src/layouts/BaseLayout.astro`, `src/components/seo/*`, `src/components/layout/SkipLink.astro`                                               | document shell + SEO              | 2    |
+| `public/robots.txt`, `public/site.webmanifest`, `public/favicon*`                                                                            | static SEO assets                 | 2    |
+| `src/content/schemas.ts`                                                                                                                     | Zod schema factories per section  | 3    |
+| `src/content.config.ts`                                                                                                                      | collections wiring                | 3    |
+| `src/content/sections/*.yaml`, `src/assets/**`                                                                                               | sample content                    | 3    |
+| `src/lib/sections.ts`                                                                                                                        | `getSection`, `buildNav`          | 3    |
+| `src/styles/global.css`                                                                                                                      | Tailwind + `@theme` tokens        | 4    |
+| `src/lib/alpine.ts`, `src/types/alpinejs-ui.d.ts`                                                                                            | Alpine entrypoint                 | 4    |
+| `src/components/ui/*`                                                                                                                        | Button, Container, SectionHeading | 4    |
+| `src/components/layout/{Header,MobileMenu,Footer}.astro`                                                                                     | chrome                            | 4    |
+| `playwright.config.ts`, `tests/e2e/fixtures.ts`                                                                                              | E2E runner + axe helper           | 4    |
+| `src/components/sections/{Logos,Features,HowItWorks,Testimonials,Pricing,Faq,FinalCta}.astro`, `src/lib/pricing.ts`                          | static sections                   | 5    |
+| `src/lib/consent.ts`, `src/components/layout/{CookieConsent,GtmHead,GtmBody}.astro`                                                          | consent + GTM                     | 6    |
+| `src/lib/carousel.ts`, `src/lib/youtube-embed.ts`, `src/components/sections/Hero.astro`, `src/components/hero/*`                             | hero                              | 7    |
+| `src/lib/contact-schema.ts`, `src/lib/contact-form.ts`, `src/lib/firebase.ts`, `src/components/sections/Contact.astro`                       | contact form                      | 8    |
+| `firebase/*`, `tests/rules/*`, `.env.test`, `.env.example`                                                                                   | rules + emulator                  | 9    |
+| `src/pages/{privacidade,termos,404}.astro`, `src/pages/og/[...route].ts`, `src/components/legal/CookieTable.astro`, `src/content/legal/*.md` | legal + OG                        | 10   |
+| `.github/workflows/ci.yml`, `lighthouserc.json`                                                                                              | CI                                | 11   |
+| `.github/workflows/{deploy,release}.yml`, `.github/dependabot.yml`, templates, `docs/*.md`, `README.md`, `CONTRIBUTING.md`                   | delivery + docs                   | 12   |
 
 ---
 
 ### Task 1: Project scaffold and code-quality tooling
 
 **Files:**
+
 - Create: `package.json`, `pnpm-workspace.yaml`, `.nvmrc`, `.editorconfig`, `.gitignore`, `.gitattributes`, `astro.config.ts`, `tsconfig.json`, `src/pages/index.astro` (placeholder), `eslint.config.js`, `prettier.config.js`, `.prettierignore`, `commitlint.config.js`, `.husky/pre-commit`, `.husky/commit-msg`, `.vscode/settings.json`, `.vscode/extensions.json`
 
 **Interfaces:**
+
 - Produces: scripts `dev`, `build`, `preview`, `check`, `lint`, `lint:fix`, `format`, `format:check`, `prepare` used by every later task.
 
 - [ ] **Step 1: Scaffold Astro minimal template with pnpm**
@@ -122,6 +124,7 @@ Expected: non-zero exit with `subject may not be empty` / `type may not be empty
 git add -A
 git commit -m "chore: scaffold astro project with lint, format and commit tooling"
 ```
+
 Expected: pre-commit hook runs lint-staged; commit-msg hook passes.
 
 ---
@@ -129,11 +132,13 @@ Expected: pre-commit hook runs lint-staged; commit-msg hook passes.
 ### Task 2: Env schema, site config, i18n, base layout and SEO
 
 **Files:**
+
 - Create: `vitest.config.ts`, `src/site.config.ts`, `src/i18n/pt-BR.ts`, `src/lib/env.ts`, `src/lib/seo.ts`, `src/layouts/BaseLayout.astro`, `src/components/seo/Seo.astro`, `src/components/seo/JsonLd.astro`, `src/components/layout/SkipLink.astro`, `public/robots.txt`, `public/site.webmanifest`, `public/favicon.svg`, `public/favicon.ico`, `public/apple-touch-icon.png`, `.env.example` (initial), `.env` (local, gitignored, copy of example)
 - Modify: `astro.config.ts`, `package.json`, `src/pages/index.astro`
 - Test: `tests/unit/seo.test.ts`
 
 **Interfaces:**
+
 - Produces:
   - `astro:env/client` vars (all `context: 'client', access: 'public'`): `PUBLIC_SITE_URL` (string, url), `PUBLIC_FIREBASE_API_KEY`, `PUBLIC_FIREBASE_AUTH_DOMAIN`, `PUBLIC_FIREBASE_PROJECT_ID`, `PUBLIC_FIREBASE_APP_ID`, `PUBLIC_RECAPTCHA_SITE_KEY` (strings, required), `PUBLIC_GTM_ID` (string, optional), `PUBLIC_USE_FIREBASE_EMULATOR` (boolean, default `false`).
   - `src/lib/env.ts`: `export const firebaseOptions: FirebaseOptions`, `export const useFirebaseEmulator: boolean`, `export const recaptchaSiteKey: string`, `export const gtmId: string | undefined`.
@@ -152,16 +157,24 @@ Add dev deps `vitest`, `happy-dom`. `vitest.config.ts` uses `getViteConfig` from
 import { describe, it, expect } from 'vitest';
 import { organizationJsonLd, websiteJsonLd, faqPageJsonLd } from '../../src/lib/seo';
 
-const s = { name: 'Sua Empresa', url: 'https://example.com', email: 'contato@example.com',
+const s = {
+  name: 'Sua Empresa',
+  url: 'https://example.com',
+  email: 'contato@example.com',
   social: [{ label: 'Instagram', href: 'https://instagram.com/x', icon: 'lucide:instagram' }],
-  logoUrl: 'https://example.com/logo.png' };
+  logoUrl: 'https://example.com/logo.png',
+};
 
 describe('seo', () => {
   it('organization includes sameAs from social links', () => {
     expect(organizationJsonLd(s)).toMatchObject({
-      '@context': 'https://schema.org', '@type': 'Organization', name: 'Sua Empresa',
-      url: 'https://example.com', logo: 'https://example.com/logo.png',
-      sameAs: ['https://instagram.com/x'] });
+      '@context': 'https://schema.org',
+      '@type': 'Organization',
+      name: 'Sua Empresa',
+      url: 'https://example.com',
+      logo: 'https://example.com/logo.png',
+      sameAs: ['https://instagram.com/x'],
+    });
   });
   it('website has name and url', () => {
     expect(websiteJsonLd(s)).toMatchObject({ '@type': 'WebSite', url: 'https://example.com' });
@@ -169,8 +182,11 @@ describe('seo', () => {
   it('faq page maps items to Question/Answer', () => {
     const ld = faqPageJsonLd([{ question: 'P?', answerText: 'R.' }]) as { mainEntity: unknown[] };
     expect(ld).toMatchObject({ '@type': 'FAQPage' });
-    expect(ld.mainEntity[0]).toEqual({ '@type': 'Question', name: 'P?',
-      acceptedAnswer: { '@type': 'Answer', text: 'R.' } });
+    expect(ld.mainEntity[0]).toEqual({
+      '@type': 'Question',
+      name: 'P?',
+      acceptedAnswer: { '@type': 'Answer', text: 'R.' },
+    });
   });
 });
 ```
@@ -212,10 +228,12 @@ git commit -m "feat: add env schema, site config, base layout and seo metadata"
 ### Task 3: Content collections, schemas and sample content
 
 **Files:**
+
 - Create: `src/content/schemas.ts`, `src/content.config.ts`, `src/lib/sections.ts`, `src/content/sections/{header,hero,logos,features,how-it-works,testimonials,pricing,faq,cta,contact,footer}.yaml`, sample images under `src/assets/{hero,logos,testimonials,brand}/` and `public/media/hero-sample.mp4` (≤1 MB, royalty-free or generated solid-color clip)
 - Test: `tests/unit/schemas.test.ts`, `tests/unit/sections.test.ts`
 
 **Interfaces:**
+
 - Produces:
   - `src/content/schemas.ts`: `type ImageFn = SchemaContext['image']`; factories `headerSchema(image)`, `heroSchema(image)`, `logosSchema(image)`, `featuresSchema`, `howItWorksSchema`, `testimonialsSchema(image)`, `pricingSchema`, `faqSchema`, `ctaSchema`, `contactSchema`, `footerSchema`; shared `buttonSchema = z.object({ label: z.string().min(1), href: z.string().min(1), variant: z.enum(['primary','secondary']).default('primary') })`.
   - Section keys: `type SectionKey = 'hero'|'logos'|'features'|'how-it-works'|'testimonials'|'pricing'|'faq'|'cta'|'contact'`. Every section schema has `enabled: z.boolean().default(true)`; `header`/`footer` have no `enabled`.
@@ -232,6 +250,7 @@ git commit -m "feat: add env schema, site config, base layout and seo metadata"
 - [ ] **Step 1: Write failing tests**
 
 `tests/unit/schemas.test.ts` — use `const image = () => z.string()` stub:
+
 - `hero accepts minimal image slide` (defaults: `overlay` 0.4, `align` 'center', `buttons` [], `transition` 'fade', `autoplay.intervalMs` 7000).
 - `hero rejects 3 buttons` (error path `['slides',0,'buttons']`).
 - `hero rejects youtube without poster`, `hero rejects video without poster`, `hero rejects youtube id of wrong length`.
@@ -240,6 +259,7 @@ git commit -m "feat: add env schema, site config, base layout and seo metadata"
 - `contact rejects subject value with spaces`.
 
 `tests/unit/sections.test.ts`:
+
 - `buildNav drops links of disabled sections` — links `[{href:'#features',section:'features'},{href:'#faq',section:'faq'},{href:'/blog'}]`, enabled `{'features'}` → keeps `#features` and `/blog`.
 
 - [ ] **Step 2: Run — expect FAIL** (`pnpm test`, modules not found)
@@ -263,10 +283,12 @@ Expected: build fails with a message pointing at `hero` → `slides.0.buttons`. 
 ### Task 4: Theme, Alpine entrypoint, UI primitives, header/footer and E2E harness
 
 **Files:**
+
 - Create: `src/styles/global.css`, `src/lib/alpine.ts` (replace stub), `src/types/alpinejs-ui.d.ts`, `src/components/ui/{Button,Container,SectionHeading}.astro`, `src/components/layout/{Header,MobileMenu,Footer}.astro`, `playwright.config.ts`, `tests/e2e/fixtures.ts`, `tests/e2e/layout.spec.ts`
 - Modify: `src/layouts/BaseLayout.astro`, `src/pages/index.astro`, `package.json`
 
 **Interfaces:**
+
 - Consumes: `getSection('header'|'footer')`, `buildNav`, `enabledSections` (Task 3); `site` (Task 2); `t` (Task 2).
 - Produces:
   - `src/lib/alpine.ts`: `export default (Alpine: Alpine) => void` registering plugins `ui`, `focus`, `collapse` and later `Alpine.data(...)` registrations (Tasks 5–8 add lines here).
@@ -313,11 +335,13 @@ Expected: all layout specs pass on both projects.
 ### Task 5: Static sections — logos, features, how it works, testimonials, pricing, FAQ, final CTA
 
 **Files:**
+
 - Create: `src/components/sections/{Logos,Features,HowItWorks,Testimonials,Pricing,Faq,FinalCta}.astro`, `src/lib/pricing.ts`
 - Modify: `src/pages/index.astro`, `src/lib/alpine.ts`, `src/i18n/pt-BR.ts`
 - Test: `tests/unit/pricing.test.ts`, `tests/e2e/sections.spec.ts`
 
 **Interfaces:**
+
 - Consumes: `getSection`, primitives (Task 4), `faqPageJsonLd` (Task 2).
 - Produces:
   - `src/lib/pricing.ts`: `formatPrice(value: number): string` (`Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 })` when integer, else 2 decimals); `yearlySavingsPercent(monthly: number, yearly: number): number` (rounded integer, `Math.round((1 - yearly / (monthly * 12)) * 100)`); Alpine data `pricing()` → `{ yearly: boolean }` registered as `pricing`.
@@ -327,10 +351,12 @@ Expected: all layout specs pass on both projects.
 - [ ] **Step 1: Write failing tests**
 
 `tests/unit/pricing.test.ts`:
+
 - `formatPrice(99)` → matches `/R\$\s?99$/`; `formatPrice(99.9)` → matches `/R\$\s?99,90$/`.
 - `yearlySavingsPercent(100, 1000)` → `17`.
 
 `tests/e2e/sections.spec.ts`:
+
 - `faq toggles with keyboard` — focus first question button, `aria-expanded="false"`; Enter → `"true"` and panel visible; Space → collapsed.
 - `pricing switch shows yearly prices` — switch role `switch` named `Cobrança anual`; toggling flips `aria-checked` and changes the first plan's displayed price to the yearly value from sample content.
 - `home includes FAQPage json-ld` — some `script[type="application/ld+json"]` parses to `@type: 'FAQPage'`.
@@ -352,11 +378,13 @@ Run: `pnpm test && pnpm test:e2e && pnpm lint && pnpm check`
 ### Task 6: Cookie consent and GTM with Consent Mode v2
 
 **Files:**
+
 - Create: `src/lib/consent.ts`, `src/components/layout/{CookieConsent,GtmHead,GtmBody}.astro`
 - Modify: `src/layouts/BaseLayout.astro`, `src/i18n/pt-BR.ts`
 - Test: `tests/unit/consent.test.ts`, `tests/e2e/consent.spec.ts`
 
 **Interfaces:**
+
 - Consumes: `gtmId` (Task 2), `t`.
 - Produces (`src/lib/consent.ts`):
   - `type ConsentCategory = 'necessary'|'analytics'|'marketing'|'media'`.
@@ -372,6 +400,7 @@ Run: `pnpm test && pnpm test:e2e && pnpm lint && pnpm check`
 - [ ] **Step 1: Write failing tests**
 
 `tests/unit/consent.test.ts`:
+
 - `consentModeState(['necessary'])` → all four `'denied'`.
 - `['necessary','analytics']` → only `analytics_storage: 'granted'`.
 - `['necessary','marketing']` → `ad_storage`, `ad_user_data`, `ad_personalization` granted, analytics denied.
@@ -379,6 +408,7 @@ Run: `pnpm test && pnpm test:e2e && pnpm lint && pnpm check`
 - `cookieTable has a row for every category`.
 
 `tests/e2e/consent.spec.ts`:
+
 - `banner shows on first visit` — dialog with button `Aceitar todos` visible.
 - `rejecting hides banner and persists` — click `Rejeitar todos`, reload, banner absent; `cc_cookie` cookie present.
 - `footer link reopens preferences` — click `Preferências de cookies` → preferences modal visible with toggles `Analytics`, `Marketing`, `Mídia`.
@@ -400,11 +430,13 @@ Add dep `vanilla-cookieconsent`; import its CSS in `CookieConsent.astro` and ove
 ### Task 7: Hero with carousel and image/MP4/YouTube backgrounds
 
 **Files:**
+
 - Create: `src/lib/carousel.ts`, `src/lib/youtube-embed.ts`, `src/components/sections/Hero.astro`, `src/components/hero/{HeroSlide,SlideBackground}.astro`
 - Modify: `src/lib/alpine.ts`, `src/pages/index.astro`, `src/i18n/pt-BR.ts`
 - Test: `tests/unit/carousel.test.ts`, `tests/unit/hero.test.ts`, `tests/e2e/hero.spec.ts`
 
 **Interfaces:**
+
 - Consumes: hero schema (Task 3), `hasConsent`, `openPreferences`, `consent:change` event (Task 6).
 - Produces:
   - `src/lib/carousel.ts`:
@@ -418,10 +450,12 @@ Add dep `vanilla-cookieconsent`; import its CSS in `CookieConsent.astro` and ove
 - [ ] **Step 1: Write failing tests**
 
 `tests/unit/carousel.test.ts`:
+
 - `shouldAutoplay` table: `(enabled, 3, false) → true`, `(enabled, 1, false) → false`, `(enabled, 3, true) → false`, `(disabled, 3, false) → false`.
 - `youtubeEmbedUrl('dQw4w9WgXcQ')` host is `www.youtube-nocookie.com` and has `playlist=dQw4w9WgXcQ`, `mute=1`, `loop=1`.
 
 `tests/e2e/hero.spec.ts` (sample hero has 3 slides):
+
 - `next/prev arrows change slide` — slide `aria-label="2 de 3"` becomes active (`aria-hidden` false / `data-active`) after `Próximo slide`.
 - `dots navigate` — `Ir para o slide 3` activates slide 3.
 - `pause button toggles autoplay` — button `Pausar carrossel` → label becomes `Reproduzir carrossel`; slide index unchanged after `intervalMs + 1000`.
@@ -431,6 +465,7 @@ Add dep `vanilla-cookieconsent`; import its CSS in `CookieConsent.astro` and ove
 - `hero has no a11y violations`.
 
 `tests/unit/hero.test.ts` (Astro Container API, `experimental_AstroContainer.create()`; `Hero.astro` accepts an optional `data` prop of the hero data type, defaulting to `await getSection('hero')`):
+
 - `single slide renders without carousel` — render with one image slide → HTML has no `aria-roledescription="carousel"`, no `Próximo slide`, no `x-data="carousel`.
 - `multiple slides render carousel controls` — two slides → HTML contains `aria-roledescription="carousel"` and `Ir para o slide 2`.
 
@@ -449,11 +484,13 @@ Add deps `embla-carousel`, `embla-carousel-autoplay`, `embla-carousel-fade`. `He
 ### Task 8: Contact form (schema, Alpine component, lazy Firebase)
 
 **Files:**
+
 - Create: `src/lib/contact-schema.ts`, `src/lib/contact-form.ts`, `src/lib/firebase.ts`, `src/components/sections/Contact.astro`
 - Modify: `src/lib/alpine.ts`, `src/pages/index.astro`, `src/i18n/pt-BR.ts`
 - Test: `tests/unit/contact-schema.test.ts`, `tests/unit/contact-form.test.ts`
 
 **Interfaces:**
+
 - Consumes: `firebaseOptions`, `useFirebaseEmulator`, `recaptchaSiteKey` (Task 2); contact section data (Task 3); `site.privacyPolicyVersion`.
 - Produces:
   - `src/lib/contact-schema.ts`: `CONTACT_LIMITS = { name: [2,100], email: 254, phoneDigits: [10,11], message: [10,2000], consentVersion: 20, page: 200 } as const`; `createContactSchema(subjects: readonly string[])` → Zod object `{ name, email, phone, subject, message, consent }` where `phone` transforms masked input to digits and `''` → `null`; `type ContactInput = z.input<…>`; `type ContactData = z.output<…>`; `type ContactDoc = ContactData & { consentVersion: string; page: string }`; `toContactDoc(data: ContactData, meta: { consentVersion: string; page: string }): ContactDoc`.
@@ -464,6 +501,7 @@ Add deps `embla-carousel`, `embla-carousel-autoplay`, `embla-carousel-fade`. `He
 - [ ] **Step 1: Write failing tests**
 
 `tests/unit/contact-schema.test.ts` (subjects `['orcamento','duvida','suporte','outro']`):
+
 - valid full input passes; `phone '(11) 98765-4321'` → `'11987654321'`.
 - `empty masked phone becomes null` — `phone: ''` and `phone: '(__) _____-____'` → `null`.
 - name of 1 char fails; 101 chars fails; trimmed `'  Ana  '` → `'Ana'`.
@@ -475,6 +513,7 @@ Add deps `embla-carousel`, `embla-carousel-autoplay`, `embla-carousel-fade`. `He
 - `toContactDoc` adds `consentVersion` and `page`, has no `website` key.
 
 `tests/unit/contact-form.test.ts` (`// @vitest-environment happy-dom`; call the factory, bind `$refs` stub, inject `submit = vi.fn()`):
+
 - invalid submit sets `errors.email` and keeps `status 'idle'`, `submit` not called.
 - valid submit calls `submit` once with a `ContactDoc` (`consentVersion` from opts, `page` = `location.pathname`) and ends in `'success'`.
 - `honeypot filled → success without calling submit`.
@@ -496,10 +535,12 @@ Add deps `firebase`, `imask`. `Contact.astro`: `<section id="contato">`, `<form 
 ### Task 9: Firestore rules, emulator, rules tests and form E2E
 
 **Files:**
+
 - Create: `firebase/firestore.rules`, `firebase/firestore.indexes.json`, `firebase/firebase.json`, `.firebaserc`, `tests/rules/contacts.test.ts`, `vitest.rules.config.ts`, `tests/e2e/contact.spec.ts`
 - Modify: `package.json`, `playwright.config.ts`, `.env.example`, `.env.test`
 
 **Interfaces:**
+
 - Consumes: `ContactDoc` shape and `CONTACT_LIMITS` (Task 8); subjects list (Task 3).
 - Produces: scripts `"test:rules": "firebase emulators:exec --only firestore --project demo-landing --config firebase/firebase.json \"vitest run --config vitest.rules.config.ts\""`, `"dev:emulators": "concurrently -k -n fb,astro \"firebase emulators:start --only firestore --project demo-landing --config firebase/firebase.json\" \"astro dev --mode test\""`. Firestore emulator port `8080`, UI disabled in CI.
 
@@ -508,6 +549,7 @@ Add deps `firebase`, `imask`. `Contact.astro`: `<section id="contato">`, `<form 
 - [ ] **Step 2: Write failing rules tests `tests/rules/contacts.test.ts`**
 
 `initializeTestEnvironment({ projectId: 'demo-landing', firestore: { rules: readFileSync('firebase/firestore.rules','utf8'), host: '127.0.0.1', port: 8080 } })`; unauthenticated context; `valid()` helper builds a doc with `createdAt: serverTimestamp()`.
+
 - `assertSucceeds` create valid doc; valid doc with `phone: null`.
 - `assertFails`: extra key `foo`; missing `message`; `name` number; `name` 101 chars; `message` 9 chars; `email` `'nope'`; `phone` `'123'`; `subject` `'spam'`; `consent: false`; `createdAt` = `Timestamp.fromDate(new Date(2000,0,1))`; `consentVersion` 21 chars; `page` 201 chars.
 - `assertFails`: get, list, update, delete on `contacts`; write to `other/x`.
@@ -523,6 +565,7 @@ Add deps `firebase`, `imask`. `Contact.astro`: `<section id="contato">`, `<form 
 - [ ] **Step 6: Write failing E2E `tests/e2e/contact.spec.ts`**
 
 Playwright `webServer` becomes an array: Firestore emulator (`firebase emulators:start --only firestore --project demo-landing --config firebase/firebase.json`, `url: 'http://127.0.0.1:8080'`) + preview. `beforeEach` clears data: `DELETE http://127.0.0.1:8080/emulator/v1/projects/demo-landing/databases/(default)/documents`.
+
 - `shows inline errors on empty submit` — click `Enviar mensagem`; `Campo obrigatório` visible under name; focus on name input.
 - `submits and stores document` — fill all fields (phone `11987654321`, subject `Dúvida`), check consent, submit → `Mensagem enviada!` visible; `GET …/documents/contacts` returns 1 doc with `subject.stringValue === 'duvida'`, `phone.stringValue === '11987654321'`.
 - `honeypot filled shows success but stores nothing` — `page.locator('input[name=website]').fill('x', { force: true })`, submit valid → success; emulator returns 0 docs.
@@ -537,10 +580,12 @@ Playwright `webServer` becomes an array: Firestore emulator (`firebase emulators
 ### Task 10: Legal pages, 404, cookie table and OG images
 
 **Files:**
+
 - Create: `src/content/legal/{privacidade,termos}.md`, `src/pages/privacidade.astro`, `src/pages/termos.astro`, `src/pages/404.astro`, `src/components/legal/CookieTable.astro`, `src/pages/og/[...route].ts`, `tests/e2e/pages.spec.ts`
 - Modify: `src/content.config.ts` (add `legal` collection: `glob({ pattern: '*.md', base: './src/content/legal' })`, schema `{ title: string, description: string, updatedAt: z.coerce.date() }`), `src/components/seo/Seo.astro`
 
 **Interfaces:**
+
 - Consumes: `cookieTable` (Task 6), `site`.
 - Produces: OG images at `/og/<slug>.png` for slugs `index`, `privacidade`, `termos` via `OGImageRoute` from `astro-og-canvas` (`param: 'route'`, `pages` map `{ index: { title: site.name, description: site.description }, … }`, `bgGradient: [site.ogBackground]`, `logo: { path: './src/assets/brand/logo.png' }`); `Seo.astro` default `ogImage` = `/og/<slug>.png` resolved absolute.
 
@@ -564,10 +609,12 @@ Playwright `webServer` becomes an array: Firestore emulator (`firebase emulators
 ### Task 11: CI workflow and Lighthouse CI
 
 **Files:**
+
 - Create: `.github/workflows/ci.yml`, `lighthouserc.json`
 - Modify: `package.json` (script `"lhci": "lhci autorun"`), any component needed to meet budgets
 
 **Interfaces:**
+
 - Consumes: all scripts from Tasks 1–10.
 - Produces: workflow named `CI` (Task 12's deploy listens to it via `workflow_run`).
 
@@ -593,10 +640,12 @@ Triggers: `pull_request`, `push` on `main`. `concurrency: ci-${{ github.ref }}` 
 ### Task 12: Deploy, release, dependency updates, templates and documentation
 
 **Files:**
+
 - Create: `.github/workflows/deploy.yml`, `.github/workflows/release.yml`, `release-please-config.json`, `.release-please-manifest.json`, `.github/dependabot.yml`, `.github/PULL_REQUEST_TEMPLATE.md`, `.github/ISSUE_TEMPLATE/{bug_report.yml,feature_request.yml}`, `docs/aws-setup.md`, `docs/security-headers.md`, `docs/firebase-setup.md`, `README.md`, `CONTRIBUTING.md`
 - Modify: `.env.example` (final review)
 
 **Interfaces:**
+
 - Consumes: workflow `CI` (Task 11); env var list (Task 2).
 - Produces: GitHub Environment `production` contract — `vars`: `PUBLIC_SITE_URL`, `PUBLIC_FIREBASE_API_KEY`, `PUBLIC_FIREBASE_AUTH_DOMAIN`, `PUBLIC_FIREBASE_PROJECT_ID`, `PUBLIC_FIREBASE_APP_ID`, `PUBLIC_RECAPTCHA_SITE_KEY`, `PUBLIC_GTM_ID`, `AWS_ROLE_ARN`, `AWS_REGION`, `S3_BUCKET`, `CLOUDFRONT_DISTRIBUTION_ID`.
 

@@ -1,0 +1,9 @@
+dist/
+.astro/
+node_modules/
+coverage/
+playwright-report/
+.lighthouseci/
+test-results/
+pnpm-lock.yaml
+.superpowers/
