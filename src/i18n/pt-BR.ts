@@ -17,8 +17,36 @@ export const t = {
     required: 'Campo obrigatório',
   },
   consent: {
-    accept: 'Aceitar',
-    reject: 'Recusar',
+    title: 'Usamos cookies',
+    description:
+      'Usamos cookies necessários para o funcionamento do site e, com a sua permissão, cookies de análise, marketing e mídia. Você pode mudar sua escolha a qualquer momento.',
+    acceptAll: 'Aceitar todos',
+    rejectAll: 'Rejeitar todos',
+    preferences: 'Preferências',
+    savePreferences: 'Salvar preferências',
+    close: 'Fechar',
+    preferencesTitle: 'Preferências de cookies',
+    preferencesIntroTitle: 'Como usamos cookies',
+    preferencesIntro:
+      'Escolha quais categorias de cookies você permite. Os cookies necessários não podem ser desativados.',
+    categories: {
+      necessary: {
+        title: 'Necessários',
+        description: 'Essenciais para o funcionamento e a segurança do site.',
+      },
+      analytics: {
+        title: 'Analytics',
+        description: 'Ajudam a entender como o site é usado, de forma estatística.',
+      },
+      marketing: {
+        title: 'Marketing',
+        description: 'Medem a eficácia de campanhas e permitem anúncios relevantes.',
+      },
+      media: {
+        title: 'Mídia',
+        description: 'Permitem carregar vídeos incorporados, como os do YouTube.',
+      },
+    },
   },
   pricing: {
     popular: 'Mais popular',

@@ -3,6 +3,9 @@ import '../styles/global.css';
 import Seo from '../components/seo/Seo.astro';
 import JsonLd from '../components/seo/JsonLd.astro';
 import SkipLink from '../components/layout/SkipLink.astro';
+import GtmHead from '../components/layout/GtmHead.astro';
+import GtmBody from '../components/layout/GtmBody.astro';
+import CookieConsent from '../components/layout/CookieConsent.astro';
 import { site } from '../site.config';
 import { organizationJsonLd, websiteJsonLd } from '../lib/seo';
 
@@ -29,6 +32,7 @@ const structuredData = [organizationJsonLd(seoSite), websiteJsonLd(seoSite), ...
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <GtmHead />
     <meta name="generator" content={Astro.generator} />
     <Seo title={title} description={description} ogImage={ogImage} />
     {structuredData.map((data) => (
@@ -37,11 +41,13 @@ const structuredData = [organizationJsonLd(seoSite), websiteJsonLd(seoSite), ...
     <slot name="head" />
   </head>
   <body>
+    <GtmBody />
     <SkipLink />
     <slot name="header" />
     <main id="main" tabindex="-1">
       <slot />
     </main>
     <slot name="footer" />
+    <CookieConsent />
   </body>
 </html>

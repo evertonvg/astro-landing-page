@@ -68,3 +68,18 @@
     }
   }
 }
+
+/* Cookie consent (vanilla-cookieconsent) themed with project tokens */
+#cc-main {
+  --cc-font-family: var(--font-sans);
+  --cc-btn-primary-bg: var(--color-primary-700);
+  --cc-btn-primary-border-color: var(--color-primary-700);
+  --cc-btn-primary-hover-bg: var(--color-primary-800);
+  --cc-btn-primary-hover-border-color: var(--color-primary-800);
+  --cc-btn-secondary-color: var(--color-primary-900);
+  --cc-btn-secondary-border-color: var(--color-primary-700);
+  --cc-toggle-on-bg: var(--color-primary-700);
+  --cc-separator-border-color: var(--color-primary-100);
+  --cc-link-color: var(--color-primary-700);
+  --cc-focus-ring-color: var(--color-primary-700);
+}
