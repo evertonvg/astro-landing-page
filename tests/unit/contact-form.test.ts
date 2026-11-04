@@ -53,6 +53,17 @@ describe('contactForm', () => {
     expect(submit).not.toHaveBeenCalled();
   });
 
+  it('honeypot filled with invalid data → still silent success, no submit', async () => {
+    const { form, submit } = setup();
+    form.values.website = 'http://spam';
+    form.values.email = 'nope';
+    form.values.consent = false;
+    await form.onSubmit();
+    expect(form.status).toBe('success');
+    expect(form.errors).toEqual({});
+    expect(submit).not.toHaveBeenCalled();
+  });
+
   it('submit rejects → status error, values preserved; retry calls submit again', async () => {
     const submit = vi.fn().mockRejectedValueOnce(new Error('x')).mockResolvedValue(undefined);
     const { form } = setup(submit);

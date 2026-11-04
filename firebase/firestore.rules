@@ -1,0 +1,31 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Limits mirror CONTACT_LIMITS in src/lib/contact-schema.ts.
+    function isValidContact(d) {
+      let keys = ['name', 'email', 'phone', 'subject', 'message', 'consent', 'consentVersion', 'createdAt', 'page'];
+      return d.keys().hasOnly(keys)
+        && d.keys().hasAll(keys)
+        && d.name is string && d.name.size() >= 2 && d.name.size() <= 100
+        && d.email is string && d.email.size() <= 254
+        && d.email.matches('^[^@[:space:]]+@[^@[:space:]]+[.][^@[:space:]]+$')
+        && (d.phone == null || (d.phone is string && d.phone.matches('^[0-9]{10,11}$')))
+        // Must mirror the subject values in src/content/sections/contact.yaml.
+        && d.subject in ['orcamento', 'duvida', 'suporte', 'outro']
+        && d.message is string && d.message.size() >= 10 && d.message.size() <= 2000
+        && d.consent == true
+        && d.consentVersion is string && d.consentVersion.size() >= 1 && d.consentVersion.size() <= 20
+        && d.createdAt == request.time
+        && d.page is string && d.page.size() >= 1 && d.page.size() <= 200;
+    }
+
+    match /contacts/{id} {
+      allow create: if isValidContact(request.resource.data);
+      allow read, update, delete: if false;
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

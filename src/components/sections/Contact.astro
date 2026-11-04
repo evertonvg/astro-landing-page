@@ -27,12 +27,24 @@ const errorClass = 'mt-1 text-sm text-red-700';
     <Container class="max-w-2xl">
       <SectionHeading id="contact-title" title={data.title} subtitle={data.description} />
       <div x-data={`contactForm(${options})`} class="mt-12">
-        <form
-          x-show="status !== 'success' && status !== 'error'"
-          novalidate
-          @submit.prevent="onSubmit"
-          class="space-y-5"
+        <div
+          x-show="status === 'error'"
+          x-cloak
+          role="alert"
+          x-ref="alert"
+          tabindex="-1"
+          class="mb-6 rounded-md border border-red-700 bg-red-50 p-6 text-red-900 focus:outline-2 focus:outline-offset-2 focus:outline-red-800"
         >
+          <p>{t.form.error}</p>
+          <button
+            type="button"
+            @click="retry"
+            class="mt-4 rounded-md bg-red-800 px-4 py-2 font-semibold text-white hover:bg-red-900"
+          >
+            {t.form.retry}
+          </button>
+        </div>
+        <form x-show="status !== 'success'" novalidate @submit.prevent="onSubmit" class="space-y-5">
           <div>
             <label for="contact-name" class={labelClass}>
               {t.form.labels.name}
@@ -214,21 +226,6 @@ const errorClass = 'mt-1 text-sm text-red-700';
           class="rounded-md border border-green-700 bg-green-50 p-6 text-green-900"
         >
           <p>{t.form.success}</p>
-        </div>
-        <div
-          x-show="status === 'error'"
-          x-cloak
-          role="alert"
-          class="rounded-md border border-red-700 bg-red-50 p-6 text-red-900"
-        >
-          <p>{t.form.error}</p>
-          <button
-            type="button"
-            @click="retry"
-            class="mt-4 rounded-md bg-red-800 px-4 py-2 font-semibold text-white hover:bg-red-900"
-          >
-            {t.form.retry}
-          </button>
         </div>
       </div>
     </Container>

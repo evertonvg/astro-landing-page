@@ -57,13 +57,17 @@ export default (opts: ContactFormOptions) => {
 
     /** Applies the Brazilian phone mask (8 or 9 digit numbers); imask loads on demand. */
     async maskPhone(input: HTMLInputElement) {
-      const { default: IMask } = await import('imask');
-      const mask = IMask(input, {
-        mask: [{ mask: '(00) 0000-0000' }, { mask: '(00) 00000-0000' }],
-      });
-      mask.on('accept', () => {
-        this.values.phone = mask.value;
-      });
+      try {
+        const { default: IMask } = await import('imask');
+        const mask = IMask(input, {
+          mask: [{ mask: '(00) 0000-0000' }, { mask: '(00) 00000-0000' }],
+        });
+        mask.on('accept', () => {
+          this.values.phone = mask.value;
+        });
+      } catch {
+        // Mask is progressive enhancement; the plain input still works.
+      }
     },
 
     validate(): Partial<Record<Field, string>> {
@@ -91,15 +95,15 @@ export default (opts: ContactFormOptions) => {
 
     async onSubmit() {
       if (this.status === 'submitting') return;
+      // Honeypot first: pretend success so bots get no signal, whatever else they sent.
+      if (this.values.website) {
+        this.status = 'success';
+        return;
+      }
       this.errors = this.validate();
       if (Object.keys(this.errors).length > 0) {
         this.status = 'idle';
         this.focusFirstInvalid();
-        return;
-      }
-      // Honeypot: pretend success so bots get no signal.
-      if (this.values.website) {
-        this.status = 'success';
         return;
       }
       this.status = 'submitting';
@@ -114,7 +118,17 @@ export default (opts: ContactFormOptions) => {
         this.status = 'success';
       } catch {
         this.status = 'error';
+        this.focusAlert();
       }
+    },
+
+    /** The form stays visible on error; move focus to the alert so it is announced and focus is not lost. */
+    focusAlert() {
+      const ctx = this as unknown as {
+        $nextTick?: (cb: () => void) => void;
+        $refs: Record<string, HTMLElement | undefined>;
+      };
+      ctx.$nextTick?.(() => ctx.$refs.alert?.focus());
     },
 
     retry() {
