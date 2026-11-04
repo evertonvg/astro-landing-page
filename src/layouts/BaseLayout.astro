@@ -1,4 +1,5 @@
 ---
+import { Font } from 'astro:assets';
 import '../styles/global.css';
 import Seo from '../components/seo/Seo.astro';
 import JsonLd from '../components/seo/JsonLd.astro';
@@ -32,6 +33,7 @@ const structuredData = [organizationJsonLd(seoSite), websiteJsonLd(seoSite), ...
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <Font cssVariable="--font-inter" preload />
     <GtmHead />
     <meta name="generator" content={Astro.generator} />
     <Seo title={title} description={description} ogImage={ogImage} />

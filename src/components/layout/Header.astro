@@ -15,6 +15,9 @@ const links = buildNav(header.links, await enabledSections()).map((link) => ({
   ...link,
   href: pageHref(link.href, pathname),
 }));
+// Explicit box (h-10 = 40px) so the logo is reserved before it loads: no `w-auto` mismatch.
+const LOGO_HEIGHT = 40;
+const logoWidth = Math.round((header.logo.width / header.logo.height) * LOGO_HEIGHT);
 const cta = header.cta && { ...header.cta, href: pageHref(header.cta.href, pathname) };
 ---
 
@@ -26,7 +29,14 @@ const cta = header.cta && { ...header.cta, href: pageHref(header.cta.href, pathn
         class="flex shrink-0 items-center"
         aria-label={`${header.logoAlt} - ${t.nav.homeLabel}`}
       >
-        <Image src={header.logo} alt="" height={40} loading="eager" class="h-10 w-auto" />
+        <Image
+          src={header.logo}
+          alt=""
+          width={logoWidth}
+          height={LOGO_HEIGHT}
+          loading="eager"
+          class="h-10"
+        />
       </a>
 
       <nav aria-label={t.nav.label} class="hidden md:block">

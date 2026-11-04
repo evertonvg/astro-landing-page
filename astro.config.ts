@@ -1,4 +1,4 @@
-import { defineConfig, envField } from 'astro/config';
+import { defineConfig, envField, fontProviders } from 'astro/config';
 import { loadEnv } from 'vite';
 import icon from 'astro-icon';
 import alpinejs from '@astrojs/alpinejs';
@@ -26,6 +26,25 @@ export default defineConfig({
   vite: {
     plugins: [tailwindcss()],
   },
+  // Self-hosted Inter (latin subset shipped by @fontsource-variable/inter). Astro generates the
+  // @font-face rule plus a metric-matched fallback face, so the font swap causes no layout shift.
+  fonts: [
+    {
+      provider: fontProviders.local(),
+      name: 'Inter Variable',
+      cssVariable: '--font-inter',
+      fallbacks: ['system-ui', 'sans-serif'],
+      options: {
+        variants: [
+          {
+            src: ['./node_modules/@fontsource-variable/inter/files/inter-latin-wght-normal.woff2'],
+            weight: '100 900',
+            style: 'normal',
+          },
+        ],
+      },
+    },
+  ],
   env: {
     schema: {
       PUBLIC_SITE_URL: envField.string({ context: 'client', access: 'public', url: true }),
