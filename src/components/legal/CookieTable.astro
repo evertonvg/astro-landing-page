@@ -2,7 +2,7 @@
 import { t } from '../../i18n/pt-BR';
 import { cookieTable, type ConsentCategory } from '../../lib/consent';
 
-const order: ConsentCategory[] = ['necessary', 'analytics', 'marketing', 'media'];
+const order = Object.keys(t.consent.categories) as ConsentCategory[];
 const groups = order
   .map((category) => ({
     category,
@@ -12,27 +12,22 @@ const groups = order
   .filter((group) => group.rows.length > 0);
 ---
 
-<div
-  class="not-prose overflow-x-auto"
-  tabindex="0"
-  role="region"
-  aria-label="Cookies utilizados neste site"
->
+<div class="not-prose overflow-x-auto" tabindex="0" role="region" aria-label={t.cookieTable.label}>
   <table class="w-full border-collapse text-left text-sm">
-    <caption class="sr-only">Cookies utilizados neste site</caption>
+    <caption class="sr-only">{t.cookieTable.label}</caption>
     <thead>
       <tr class="border-b border-neutral-300 text-neutral-900">
         <th scope="col" class="px-3 py-2 font-semibold">
-          Cookie
+          {t.cookieTable.columns.name}
         </th>
         <th scope="col" class="px-3 py-2 font-semibold">
-          Provedor
+          {t.cookieTable.columns.provider}
         </th>
         <th scope="col" class="px-3 py-2 font-semibold">
-          Finalidade
+          {t.cookieTable.columns.purpose}
         </th>
         <th scope="col" class="px-3 py-2 font-semibold">
-          Duração
+          {t.cookieTable.columns.duration}
         </th>
       </tr>
     </thead>

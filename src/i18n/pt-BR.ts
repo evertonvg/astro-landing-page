@@ -87,4 +87,18 @@ export const t = {
     socialLabel: 'Redes sociais',
     footerLabel: 'Rodapé',
   },
+  notFound: {
+    title: 'Página não encontrada',
+    description: 'O endereço que você acessou não existe ou foi movido.',
+    backHome: 'Voltar para o início',
+  },
+  cookieTable: {
+    label: 'Cookies utilizados neste site',
+    columns: {
+      name: 'Cookie',
+      provider: 'Provedor',
+      purpose: 'Finalidade',
+      duration: 'Duração',
+    },
+  },
 } as const;

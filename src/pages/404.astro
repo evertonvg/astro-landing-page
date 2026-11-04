@@ -1,4 +1,5 @@
 ---
+import { t } from '../i18n/pt-BR';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/layout/Header.astro';
 import Footer from '../components/layout/Footer.astro';
@@ -6,15 +7,13 @@ import Button from '../components/ui/Button.astro';
 import Container from '../components/ui/Container.astro';
 ---
 
-<BaseLayout title="Página não encontrada">
+<BaseLayout title={t.notFound.title}>
   <Header slot="header" />
   <Container class="py-24 text-center">
-    <h1 class="font-display text-4xl font-bold text-neutral-900">Página não encontrada</h1>
-    <p class="mx-auto mt-4 max-w-md text-neutral-700">
-      O endereço que você acessou não existe ou foi movido.
-    </p>
+    <h1 class="font-display text-4xl font-bold text-neutral-900">{t.notFound.title}</h1>
+    <p class="mx-auto mt-4 max-w-md text-neutral-700">{t.notFound.description}</p>
     <Button href="/" class="mt-8">
-      Voltar para o início
+      {t.notFound.backHome}
     </Button>
   </Container>
   <Footer slot="footer" />
