@@ -78,6 +78,7 @@ describe('contacts create', () => {
     'message too long': () => ({ ...valid(), message: 'a'.repeat(2001) }),
     'invalid email': () => ({ ...valid(), email: 'nope' }),
     'email too long': () => ({ ...valid(), email: `${'a'.repeat(250)}@b.co` }),
+    'email with whitespace': () => ({ ...valid(), email: 'a b@c.co' }),
     'invalid phone': () => ({ ...valid(), phone: '123' }),
     'unknown subject': () => ({ ...valid(), subject: 'spam' }),
     'consent false': () => ({ ...valid(), consent: false }),

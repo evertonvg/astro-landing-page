@@ -58,6 +58,26 @@ test.describe('contact form', () => {
     expect(await storedContacts()).toHaveLength(0);
   });
 
+  test('shows the alert on network failure, keeps values and focus, then retries', async ({
+    page,
+  }) => {
+    await page.clock.install();
+    await fillValid(page);
+    await page.route('http://127.0.0.1:8080/**', (route) => route.abort());
+    await page.getByRole('button', { name: 'Enviar mensagem' }).click();
+    await page.clock.runFor(11_000);
+    const alert = page.getByRole('alert');
+    await expect(alert).toBeVisible();
+    await expect(alert).toBeFocused();
+    await expect(page.getByRole('button', { name: 'Enviar mensagem' })).toBeVisible();
+    await expect(page.locator('#contact-name')).toHaveValue('Ana Souza');
+
+    await page.unroute('http://127.0.0.1:8080/**');
+    await alert.getByRole('button', { name: 'Tentar novamente' }).click();
+    expect(await page.evaluate(() => document.activeElement?.tagName)).not.toBe('BODY');
+    await expect(page.getByText('Mensagem enviada!')).toBeVisible({ timeout: 15_000 });
+  });
+
   test('contact section has no a11y violations', async ({ page, expectNoA11yViolations }) => {
     await expectNoA11yViolations(page);
   });

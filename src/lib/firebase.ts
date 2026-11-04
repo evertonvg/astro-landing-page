@@ -45,7 +45,23 @@ export function preloadFirebase(): void {
   getDb().catch(() => {});
 }
 
+export const SUBMIT_TIMEOUT_MS = 10_000;
+
 export async function submitContact(doc: ContactDoc): Promise<void> {
   const db = await getDb();
-  await addDoc(collection(db, 'contacts'), { ...doc, createdAt: serverTimestamp() });
+  // addDoc never rejects while offline (the write is queued), so race it against a timeout.
+  // The queued write may still land later, so a retry can create a duplicate; that is
+  // acceptable for a contact form.
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  const timeout = new Promise<never>((_, reject) => {
+    timer = setTimeout(() => reject(new Error('submit timeout')), SUBMIT_TIMEOUT_MS);
+  });
+  try {
+    await Promise.race([
+      addDoc(collection(db, 'contacts'), { ...doc, createdAt: serverTimestamp() }),
+      timeout,
+    ]);
+  } finally {
+    clearTimeout(timer);
+  }
 }

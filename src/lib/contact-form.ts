@@ -124,14 +124,25 @@ export default (opts: ContactFormOptions) => {
 
     /** The form stays visible on error; move focus to the alert so it is announced and focus is not lost. */
     focusAlert() {
-      const ctx = this as unknown as {
-        $nextTick?: (cb: () => void) => void;
-        $refs: Record<string, HTMLElement | undefined>;
+      const alert = (this as unknown as { $refs: Record<string, HTMLElement | undefined> }).$refs
+        .alert;
+      if (!alert) return;
+      const focusWhenShown = () => {
+        if (getComputedStyle(alert).display === 'none') return false;
+        alert.focus();
+        return true;
       };
-      ctx.$nextTick?.(() => ctx.$refs.alert?.focus());
+      if (focusWhenShown()) return;
+      // x-show reveals the alert in its own effect; wait for that style change.
+      const observer = new MutationObserver(() => {
+        if (focusWhenShown()) observer.disconnect();
+      });
+      observer.observe(alert, { attributes: true });
     },
 
+    /** Keeps focus on the (aria-disabled, never `disabled`) submit button so it is not dropped to body. */
     retry() {
+      (this as unknown as { $refs: Record<string, HTMLElement | undefined> }).$refs.submit?.focus();
       return this.onSubmit();
     },
   };
