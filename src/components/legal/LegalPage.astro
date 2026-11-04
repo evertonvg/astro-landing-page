@@ -1,5 +1,6 @@
 ---
 import { getEntry, render } from 'astro:content';
+import { t } from '../../i18n/pt-BR';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Header from '../layout/Header.astro';
 import Footer from '../layout/Footer.astro';
@@ -26,7 +27,7 @@ const updated = new Intl.DateTimeFormat('pt-BR', { dateStyle: 'long', timeZone: 
     <article class="prose prose-neutral mx-auto max-w-3xl">
       <h1>{title}</h1>
       <p>
-        Última atualização: <time datetime={updatedAt.toISOString().slice(0, 10)}>{updated}</time>
+        {t.legal.updatedAt}: <time datetime={updatedAt.toISOString().slice(0, 10)}>{updated}</time>
       </p>
       <Content />
       {slug === 'privacidade' && <CookieTable />}

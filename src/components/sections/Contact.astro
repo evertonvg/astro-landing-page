@@ -44,7 +44,13 @@ const errorClass = 'mt-1 text-sm text-red-700';
             {t.form.retry}
           </button>
         </div>
-        <form x-show="status !== 'success'" novalidate @submit.prevent="onSubmit" class="space-y-5">
+        <form
+          method="post"
+          x-show="status !== 'success'"
+          novalidate
+          @submit.prevent="onSubmit"
+          class="space-y-5"
+        >
           <div>
             <label for="contact-name" class={labelClass}>
               {t.form.labels.name}
@@ -224,7 +230,9 @@ const errorClass = 'mt-1 text-sm text-red-700';
           x-show="status === 'success'"
           x-cloak
           role="status"
-          class="rounded-md border border-green-700 bg-green-50 p-6 text-green-900"
+          x-ref="success"
+          tabindex="-1"
+          class="rounded-md border border-green-700 bg-green-50 p-6 text-green-900 focus:outline-2 focus:outline-offset-2 focus:outline-green-800"
         >
           <p>{t.form.success}</p>
         </div>

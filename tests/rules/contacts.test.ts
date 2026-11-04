@@ -17,6 +17,7 @@ import {
   setDoc,
   updateDoc,
 } from 'firebase/firestore';
+import { parse } from 'yaml';
 import { afterAll, beforeAll, beforeEach, describe, it } from 'vitest';
 
 let env: RulesTestEnvironment;
@@ -59,6 +60,16 @@ describe('contacts create', () => {
   it('accepts a valid document', async () => {
     await assertSucceeds(create(valid()));
   });
+
+  // Parity: every subject offered by the form must be accepted by the rules.
+  const contactYaml = parse(readFileSync('src/content/sections/contact.yaml', 'utf8')) as {
+    subjects: { value: string }[];
+  };
+  for (const { value } of contactYaml.subjects) {
+    it(`accepts contact.yaml subject "${value}"`, async () => {
+      await assertSucceeds(create({ ...valid(), subject: value }));
+    });
+  }
 
   it('accepts phone null', async () => {
     await assertSucceeds(create({ ...valid(), phone: null }));

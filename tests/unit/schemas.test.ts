@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { z } from 'astro/zod';
 import type { ImageFn } from '../../src/content/schemas';
-import { heroSchema, pricingSchema, contactSchema } from '../../src/content/schemas';
+import { heroSchema, pricingSchema, contactSchema, footerSchema } from '../../src/content/schemas';
 
 // Stub for Astro's `image()` helper: images are plain strings in unit tests.
 const image = (() => z.string()) as unknown as ImageFn;
@@ -85,5 +85,26 @@ describe('contact schema', () => {
       consentLabel: 'ok',
     });
     expect(result.success).toBe(false);
+  });
+});
+
+describe('footer schema', () => {
+  const footer = (link: object) => ({
+    columns: [{ title: 'Empresa', links: [link] }],
+    copyright: '© {year}',
+  });
+
+  it('accepts an optional section on links', () => {
+    const schema = footerSchema();
+    expect(
+      schema.safeParse(footer({ label: 'Preços', href: '#precos', section: 'pricing' })).success,
+    ).toBe(true);
+    expect(schema.safeParse(footer({ label: 'Termos', href: '/termos' })).success).toBe(true);
+  });
+
+  it('rejects an unknown section', () => {
+    expect(
+      footerSchema().safeParse(footer({ label: 'X', href: '#x', section: 'nope' })).success,
+    ).toBe(false);
   });
 });

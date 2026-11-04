@@ -4,6 +4,7 @@ import type { CollectionEntry } from 'astro:content';
 import { t } from '../../i18n/pt-BR';
 import { getSection } from '../../lib/sections';
 import HeroSlide from '../hero/HeroSlide.astro';
+import PlayPauseButton from '../hero/PlayPauseButton.astro';
 
 interface Props {
   data?: CollectionEntry<'hero'>['data'];
@@ -17,14 +18,22 @@ const config = data && {
   intervalMs: data.autoplay.intervalMs,
   transition: data.transition,
   count: slides.length,
+  hasVideo: slides.some((slide) => slide.background.type !== 'image'),
 };
+const standaloneVideo = !isCarousel && slides[0]?.background.type !== 'image';
 const controlClass =
   'flex size-11 items-center justify-center rounded-full bg-white text-neutral-900 shadow hover:bg-neutral-100';
 ---
 
 {data && !isCarousel && (
-  <section id="hero" aria-label={t.carousel.label}>
+  <section
+    id="hero"
+    class:list={{ relative: standaloneVideo }}
+    aria-label={t.carousel.label}
+    x-data={standaloneVideo ? 'heroVideo' : undefined}
+  >
     <HeroSlide slide={slides[0]} index={0} total={1} carousel={false} />
+    {standaloneVideo && <PlayPauseButton class="absolute right-4 bottom-4 z-20" />}
   </section>
 )}
 {data && isCarousel && (
@@ -73,7 +82,7 @@ const controlClass =
             type="button"
             class="group flex size-6 items-center justify-center"
             aria-label={t.carousel.goTo(index + 1)}
-            :aria-current="selected === index ? 'true' : null"
+            :aria-current={`selected === ${index} ? 'true' : null`}
             @click={`goTo(${index})`}
           >
             <span
@@ -83,26 +92,7 @@ const controlClass =
           </button>
         ))}
       </div>
-      <button
-        type="button"
-        x-show="canAutoplay && playing"
-        x-cloak
-        class:list={[controlClass, 'pointer-events-auto size-9']}
-        aria-label={t.carousel.pause}
-        @click="togglePlay()"
-      >
-        <Icon name="lucide:pause" class="size-5" aria-hidden="true" />
-      </button>
-      <button
-        type="button"
-        x-show="canAutoplay && !playing"
-        x-cloak
-        class:list={[controlClass, 'pointer-events-auto size-9']}
-        aria-label={t.carousel.play}
-        @click="togglePlay()"
-      >
-        <Icon name="lucide:play" class="size-5" aria-hidden="true" />
-      </button>
+      <PlayPauseButton />
     </div>
   </section>
 )}

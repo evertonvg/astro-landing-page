@@ -6,6 +6,8 @@ export interface CarouselConfig {
   intervalMs: number;
   transition: 'fade' | 'slide';
   count: number;
+  /** Some slide has a video background (MP4 or YouTube), so the user needs a pause control. */
+  hasVideo: boolean;
 }
 
 const reducedMotionQuery = '(prefers-reduced-motion: reduce)';
@@ -18,12 +20,12 @@ export function shouldAutoplay(
   return cfg.enabled && slideCount > 1 && !reducedMotion;
 }
 
-/** Plays only the active slide's background videos, and none under reduced motion. */
-function syncVideos(embla: EmblaCarouselType, reducedMotion: boolean): void {
+/** Plays only the active slide's background videos, and none under reduced motion or pause. */
+function syncVideos(embla: EmblaCarouselType, play: boolean): void {
   const active = embla.selectedScrollSnap();
   embla.slideNodes().forEach((slide, index) => {
     slide.querySelectorAll('video').forEach((video) => {
-      if (index === active && !reducedMotion) {
+      if (index === active && play) {
         video.play().catch(() => {});
       } else {
         video.pause();
@@ -38,6 +40,8 @@ export default (cfg: CarouselConfig) => {
   const canAutoplay = shouldAutoplay({ enabled: cfg.autoplay }, cfg.count, reducedMotion);
   let embla: EmblaCarouselType | undefined;
   let autoplay: AutoplayType | undefined;
+  /** WCAG 2.2.2: with video slides the user can pause even when slides do not auto-advance. */
+  const canPause = canAutoplay || (cfg.hasVideo && !reducedMotion);
   let userPaused = false;
   let focusInside = false;
   let failed = false;
@@ -51,9 +55,9 @@ export default (cfg: CarouselConfig) => {
 
   return {
     selected: 0,
-    playing: canAutoplay,
+    playing: canPause,
     count: cfg.count,
-    canAutoplay,
+    canPause,
     async init(this: { $root: HTMLElement; $refs: Record<string, HTMLElement>; selected: number }) {
       if (reducedMotion) {
         // Synchronous on purpose: stop the first slide's `autoplay` video before Embla loads.
@@ -96,7 +100,7 @@ export default (cfg: CarouselConfig) => {
       if (userPaused || focusInside) autoplay?.stop();
       const sync = () => {
         this.selected = api.selectedScrollSnap();
-        syncVideos(api, reducedMotion);
+        syncVideos(api, !reducedMotion && !userPaused);
       };
       api.on('select', sync);
       api.on('autoplay:timerset', holdAutoplay);
@@ -125,13 +129,14 @@ export default (cfg: CarouselConfig) => {
       this.go(index);
     },
     togglePlay() {
-      if (!canAutoplay) return;
+      if (!canPause) return;
       userPaused = this.playing;
       this.playing = !this.playing;
       if (this.playing) {
         focusInside = false; // an explicit "play" overrides focus-based pausing
         autoplay?.play();
       } else autoplay?.stop();
+      if (embla) syncVideos(embla, this.playing); // YouTube embeds follow `playing` via x-effect
     },
     destroy() {
       embla?.destroy();
@@ -140,12 +145,28 @@ export default (cfg: CarouselConfig) => {
   };
 };
 
-/** Single-slide hero: no carousel, but a background video must still respect reduced motion. */
-export const heroVideo = () => ({
-  init(this: { $el: HTMLElement }) {
-    if (!window.matchMedia(reducedMotionQuery).matches) return;
-    const video = this.$el as HTMLVideoElement;
-    video.removeAttribute('autoplay');
-    video.pause();
-  },
-});
+/**
+ * Single-slide hero with a video background: no carousel, but the video must respect reduced
+ * motion and offer a pause control (WCAG 2.2.2). A nested `youtubeEmbed` reads `playing`.
+ */
+export const heroVideo = () => {
+  const reducedMotion = window.matchMedia(reducedMotionQuery).matches;
+  return {
+    playing: !reducedMotion,
+    canPause: !reducedMotion,
+    init(this: { $root: HTMLElement }) {
+      if (!reducedMotion) return;
+      this.$root.querySelectorAll('video').forEach((video) => {
+        video.removeAttribute('autoplay');
+        video.pause();
+      });
+    },
+    togglePlay(this: { $root: HTMLElement; playing: boolean }) {
+      this.playing = !this.playing;
+      this.$root.querySelectorAll('video').forEach((video) => {
+        if (this.playing) video.play().catch(() => {});
+        else video.pause();
+      });
+    },
+  };
+};

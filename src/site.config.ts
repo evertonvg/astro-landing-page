@@ -14,7 +14,16 @@ export interface SiteConfig {
   logo: ImageMetadata;
   /** RGB background used for generated OG images. */
   ogBackground: [number, number, number];
-  privacyPolicyVersion: '2026-11-03';
+  /** RGB description colour of generated OG images. */
+  ogDescriptionColor: [number, number, number];
+  /** Brand logo (PNG) used in generated OG images. */
+  ogLogoPath: string;
+  /** Browser theme colour and web manifest `theme_color`. */
+  themeColor: string;
+  /** Web manifest `background_color`. */
+  backgroundColor: string;
+  /** Stored as `consentVersion` on each contact; 1-20 chars (Firestore rules limit). */
+  privacyPolicyVersion: string;
 }
 
 export const site: SiteConfig = {
@@ -31,5 +40,9 @@ export const site: SiteConfig = {
   ],
   logo,
   ogBackground: [29, 78, 216],
+  ogDescriptionColor: [219, 234, 254],
+  ogLogoPath: './src/assets/brand/logo.png',
+  themeColor: '#1d4ed8',
+  backgroundColor: '#ffffff',
   privacyPolicyVersion: '2026-11-03',
 };

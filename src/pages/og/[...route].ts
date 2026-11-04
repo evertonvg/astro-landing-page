@@ -19,10 +19,10 @@ export const { getStaticPaths, GET } = await OGImageRoute({
     title: page.title,
     description: page.description,
     bgGradient: [site.ogBackground],
-    logo: { path: './src/assets/brand/logo.png' },
+    logo: { path: site.ogLogoPath },
     font: {
       title: { color: [255, 255, 255] },
-      description: { color: [219, 234, 254] },
+      description: { color: site.ogDescriptionColor },
     },
   }),
 });

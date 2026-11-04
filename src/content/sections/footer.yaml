@@ -1,9 +1,9 @@
 columns:
   - title: 'Empresa'
     links:
-      - { label: 'Recursos', href: '#features' }
-      - { label: 'Preços', href: '#precos' }
-      - { label: 'Contato', href: '#contato' }
+      - { label: 'Recursos', href: '#features', section: features }
+      - { label: 'Preços', href: '#precos', section: pricing }
+      - { label: 'Contato', href: '#contato', section: contact }
   - title: 'Legal'
     links:
       - { label: 'Política de Privacidade', href: '/privacidade' }

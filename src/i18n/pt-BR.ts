@@ -87,6 +87,9 @@ export const t = {
     socialLabel: 'Redes sociais',
     footerLabel: 'Rodapé',
   },
+  legal: {
+    updatedAt: 'Última atualização',
+  },
   notFound: {
     title: 'Página não encontrada',
     description: 'O endereço que você acessou não existe ou foi movido.',

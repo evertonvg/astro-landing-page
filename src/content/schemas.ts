@@ -193,7 +193,13 @@ export const footerSchema = () =>
     columns: z.array(
       z.object({
         title: z.string().min(1),
-        links: z.array(z.object({ label: z.string().min(1), href: z.string().min(1) })),
+        links: z.array(
+          z.object({
+            label: z.string().min(1),
+            href: z.string().min(1),
+            section: sectionKeySchema.optional(),
+          }),
+        ),
       }),
     ),
     copyright: z.string().min(1),

@@ -9,11 +9,16 @@ interface Props {
   background: Background;
   /** The first slide is the LCP candidate: eager image, autoplaying video. */
   first: boolean;
-  /** Single-slide heroes have no carousel to pause a video under reduced motion. */
-  standalone: boolean;
+  /** Carousel slides tell a YouTube embed whether they are active; a lone slide always is. */
+  carousel: boolean;
+  index: number;
 }
 
-const { background, first, standalone } = Astro.props;
+const { background, first, carousel, index } = Astro.props;
+// Nested in the carousel / heroVideo scope, which provides `selected` and `playing`.
+const embedEffect = carousel
+  ? `setState(selected === ${index}, playing)`
+  : 'setState(true, playing)';
 const imageProps = {
   formats: ['avif', 'webp'] as ('avif' | 'webp')[],
   widths: [640, 1280, 1920],
@@ -38,11 +43,14 @@ const imageProps = {
     aria-hidden="true"
     poster={background.poster.src}
     src={background.src}
-    x-data={first && standalone ? 'heroVideo' : undefined}
   />
 )}
 {background.type === 'youtube' && (
-  <div x-data={`youtubeEmbed('${background.videoId}')`} class="absolute inset-0">
+  <div
+    x-data={`youtubeEmbed('${background.videoId}')`}
+    x-effect={embedEffect}
+    class="absolute inset-0"
+  >
     <Picture src={background.poster} alt="" {...imageProps} />
     <template x-if="src">
       <iframe

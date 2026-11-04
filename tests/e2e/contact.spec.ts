@@ -44,6 +44,7 @@ test.describe('contact form', () => {
     await fillValid(page);
     await page.getByRole('button', { name: 'Enviar mensagem' }).click();
     await expect(page.getByText('Mensagem enviada!')).toBeVisible();
+    await expect(page.locator('#contato [role=status]')).toBeFocused();
     await expect.poll(async () => (await storedContacts()).length).toBe(1);
     const [doc] = await storedContacts();
     expect(doc?.fields.subject?.stringValue).toBe('duvida');

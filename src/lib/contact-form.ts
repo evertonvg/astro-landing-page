@@ -1,4 +1,4 @@
-import { createContactSchema, toContactDoc, type ContactDoc } from './contact-schema';
+import type { ContactDoc } from './contact-schema';
 
 type Field = 'name' | 'email' | 'phone' | 'subject' | 'message' | 'consent';
 type Status = 'idle' | 'submitting' | 'success' | 'error';
@@ -11,12 +11,30 @@ export interface ContactFormOptions {
 
 const FIELDS: Field[] = ['name', 'email', 'phone', 'subject', 'message', 'consent'];
 
+type SchemaModule = typeof import('./contact-schema');
+let schemaModule: Promise<SchemaModule> | undefined;
+
+/** Zod lives in this chunk; load it on demand so it stays out of the initial page bundle. */
+function loadSchemaModule(): Promise<SchemaModule> {
+  schemaModule ??= import('./contact-schema').catch((error: unknown) => {
+    schemaModule = undefined; // allow a retry after a failed load
+    throw error;
+  });
+  return schemaModule;
+}
+
 const defaultSubmit = (doc: ContactDoc) => import('./firebase').then((m) => m.submitContact(doc));
 
 /** Alpine state for the contact form. Only `init` and focus handling touch `$el`/`$refs`. */
 export default (opts: ContactFormOptions) => {
-  const schema = createContactSchema(opts.subjects);
   const submit = opts.submit ?? defaultSubmit;
+  let schema: Awaited<ReturnType<typeof getSchema>> | undefined;
+  /** Guards double submits across the async validation that precedes `status = 'submitting'`. */
+  let inFlight = false;
+
+  async function getSchema() {
+    return (await loadSchemaModule()).createContactSchema(opts.subjects);
+  }
 
   return {
     values: {
@@ -31,7 +49,7 @@ export default (opts: ContactFormOptions) => {
     errors: {} as Partial<Record<Field, string>>,
     status: 'idle' as Status,
 
-    /** Loads the Firebase chunk shortly before the form is needed (once). */
+    /** Loads the validation and Firebase chunks shortly before the form is needed (once). */
     init() {
       const el = (this as unknown as { $el: HTMLElement }).$el;
       let done = false;
@@ -40,6 +58,7 @@ export default (opts: ContactFormOptions) => {
         done = true;
         observer?.disconnect();
         el.removeEventListener('focusin', preload);
+        void loadSchemaModule().catch(() => {});
         void import('./firebase').then((m) => m.preloadFirebase()).catch(() => {});
       };
       const observer =
@@ -70,7 +89,8 @@ export default (opts: ContactFormOptions) => {
       }
     },
 
-    validate(): Partial<Record<Field, string>> {
+    async validate(): Promise<Partial<Record<Field, string>>> {
+      schema ??= await getSchema();
       const result = schema.safeParse(this.values);
       const errors: Partial<Record<Field, string>> = {};
       if (!result.success) {
@@ -82,9 +102,13 @@ export default (opts: ContactFormOptions) => {
       return errors;
     },
 
-    validateField(field: Field) {
-      const message = this.validate()[field];
-      this.errors = { ...this.errors, [field]: message };
+    async validateField(field: Field) {
+      try {
+        const message = (await this.validate())[field];
+        this.errors = { ...this.errors, [field]: message };
+      } catch {
+        // Validation chunk failed to load; the submit handler reports that failure.
+      }
     },
 
     focusFirstInvalid() {
@@ -94,21 +118,24 @@ export default (opts: ContactFormOptions) => {
     },
 
     async onSubmit() {
-      if (this.status === 'submitting') return;
+      if (this.status === 'submitting' || inFlight) return;
       // Honeypot first: pretend success so bots get no signal, whatever else they sent.
       if (this.values.website) {
         this.status = 'success';
+        this.focusRef('success');
         return;
       }
-      this.errors = this.validate();
-      if (Object.keys(this.errors).length > 0) {
-        this.status = 'idle';
-        this.focusFirstInvalid();
-        return;
-      }
-      this.status = 'submitting';
+      inFlight = true;
       try {
-        const data = schema.parse(this.values);
+        this.errors = await this.validate();
+        if (Object.keys(this.errors).length > 0) {
+          this.status = 'idle';
+          this.focusFirstInvalid();
+          return;
+        }
+        this.status = 'submitting';
+        const { toContactDoc } = await loadSchemaModule();
+        const data = (schema ??= await getSchema()).parse(this.values);
         await submit(
           toContactDoc(data, {
             consentVersion: opts.consentVersion,
@@ -116,28 +143,35 @@ export default (opts: ContactFormOptions) => {
           }),
         );
         this.status = 'success';
+        this.focusRef('success');
       } catch {
         this.status = 'error';
-        this.focusAlert();
+        this.focusRef('alert');
+      } finally {
+        inFlight = false;
       }
     },
 
-    /** The form stays visible on error; move focus to the alert so it is announced and focus is not lost. */
-    focusAlert() {
-      const alert = (this as unknown as { $refs: Record<string, HTMLElement | undefined> }).$refs
-        .alert;
-      if (!alert) return;
+    /**
+     * Moves focus to a status region (error alert or success message) once it is shown, so it is
+     * announced and focus is not dropped to body when the focused control disappears.
+     */
+    focusRef(name: 'alert' | 'success') {
+      const target = (this as unknown as { $refs: Record<string, HTMLElement | undefined> }).$refs[
+        name
+      ];
+      if (!target) return;
       const focusWhenShown = () => {
-        if (getComputedStyle(alert).display === 'none') return false;
-        alert.focus();
+        if (getComputedStyle(target).display === 'none') return false;
+        target.focus();
         return true;
       };
       if (focusWhenShown()) return;
-      // x-show reveals the alert in its own effect; wait for that style change.
+      // x-show reveals the region in its own effect; wait for that style change.
       const observer = new MutationObserver(() => {
         if (focusWhenShown()) observer.disconnect();
       });
-      observer.observe(alert, { attributes: true });
+      observer.observe(target, { attributes: true });
     },
 
     /** Keeps focus on the (aria-disabled, never `disabled`) submit button so it is not dropped to body. */

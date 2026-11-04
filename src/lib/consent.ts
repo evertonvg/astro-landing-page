@@ -103,8 +103,9 @@ export async function initConsent(): Promise<void> {
 
   await CookieConsent.run({
     revision: CONSENT_REVISION,
-    // Playwright sets navigator.webdriver, which would otherwise hide the banner in E2E.
-    hideFromBots: false,
+    // Playwright sets navigator.webdriver, which would otherwise hide the banner in E2E
+    // (test builds, `--mode test`); production keeps the library default behaviour.
+    hideFromBots: import.meta.env.MODE !== 'test',
     cookie: { name: CONSENT_COOKIE_NAME, expiresAfterDays: 182 },
     guiOptions: {
       consentModal: { layout: 'box inline', position: 'bottom right' },

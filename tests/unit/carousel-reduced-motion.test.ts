@@ -11,7 +11,13 @@ describe('carousel under reduced motion', () => {
     video.pause = vi.fn();
     root.append(video);
 
-    const data = carousel({ autoplay: true, intervalMs: 7000, transition: 'fade', count: 2 });
+    const data = carousel({
+      autoplay: true,
+      intervalMs: 7000,
+      transition: 'fade',
+      count: 2,
+      hasVideo: true,
+    });
     void data.init.call({ $root: root, $refs: {}, selected: 0 }).catch(() => {});
 
     expect(video.hasAttribute('autoplay')).toBe(false);

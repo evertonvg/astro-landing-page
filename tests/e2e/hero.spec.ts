@@ -14,8 +14,12 @@ test.describe('carousel', () => {
     await expect(slide(page, 1)).toHaveAttribute('data-active', 'true');
   });
 
-  test('dots navigate', async ({ page }) => {
+  test('dots navigate and mark the current slide', async ({ page }) => {
     await page.goto('/');
+    await expect(page.getByRole('button', { name: 'Ir para o slide 1' })).toHaveAttribute(
+      'aria-current',
+      'true',
+    );
     await page.getByRole('button', { name: 'Ir para o slide 3' }).click();
     await expect(slide(page, 3)).toHaveAttribute('data-active', 'true');
   });
@@ -28,6 +32,29 @@ test.describe('carousel', () => {
     await page.mouse.move(0, 0);
     await page.waitForTimeout(7000 + 1000);
     await expect(slide(page, 1)).toHaveAttribute('data-active', 'true');
+  });
+
+  test('pausing the carousel pauses the active video', async ({ page }) => {
+    await page.goto('/');
+    await page.getByRole('button', { name: 'Ir para o slide 3' }).click();
+    await expect(slide(page, 3)).toHaveAttribute('data-active', 'true');
+    const video = slide(page, 3).locator('video');
+    // Spy on playback: headless Chromium may lack the codec to actually play the sample.
+    await video.evaluate((el: HTMLVideoElement) => {
+      const w = window as unknown as { __played: number };
+      w.__played = 0;
+      const play = el.play.bind(el);
+      el.play = () => {
+        w.__played++;
+        return play();
+      };
+    });
+    await page.getByRole('button', { name: 'Pausar carrossel' }).click();
+    expect(await video.evaluate((el: HTMLVideoElement) => el.paused)).toBe(true);
+    await page.getByRole('button', { name: 'Reproduzir carrossel' }).click();
+    await expect
+      .poll(() => page.evaluate(() => (window as unknown as { __played: number }).__played))
+      .toBeGreaterThan(0);
   });
 
   test('arrow keys navigate when focus is inside the carousel', async ({ page }) => {
@@ -84,9 +111,27 @@ test.describe('youtube slide', () => {
     await expect(page.getByRole('dialog', { name: 'Preferências de cookies' })).toBeVisible();
   });
 
+  test('loads the iframe only while its slide is active', async ({ page }) => {
+    const iframe = page.locator('iframe[src*="youtube-nocookie"]');
+    await page.goto('/');
+    await page.getByRole('button', { name: 'Aceitar todos' }).click();
+    await page.getByRole('button', { name: 'Pausar carrossel' }).click();
+    await expect(iframe).toHaveCount(0);
+    await page.getByRole('button', { name: 'Reproduzir carrossel' }).click();
+    await page.getByRole('button', { name: 'Ir para o slide 2' }).click();
+    await expect(iframe).toHaveCount(1);
+    await page.getByRole('button', { name: 'Pausar carrossel' }).click();
+    await expect(iframe).toHaveCount(0); // pause returns to the poster
+    await page.getByRole('button', { name: 'Reproduzir carrossel' }).click();
+    await expect(iframe).toHaveCount(1);
+    await page.getByRole('button', { name: 'Ir para o slide 3' }).click();
+    await expect(iframe).toHaveCount(0);
+  });
+
   test('revoking media consent removes youtube iframe', async ({ page }) => {
     await page.goto('/');
     await page.getByRole('button', { name: 'Aceitar todos' }).click();
+    await page.getByRole('button', { name: 'Ir para o slide 2' }).click();
     await expect(page.locator('iframe[src*="youtube-nocookie"]')).toHaveCount(1);
     await page
       .getByRole('contentinfo')

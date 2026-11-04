@@ -48,7 +48,7 @@ const carouselAttrs: Record<string, string | boolean | undefined> = carousel
   ]}
   {...carouselAttrs}
 >
-  <SlideBackground background={slide.background} first={first} standalone={!carousel} />
+  <SlideBackground background={slide.background} first={first} carousel={carousel} index={index} />
   <div
     class="absolute inset-0 bg-black"
     style={`opacity: ${slide.overlay}`}

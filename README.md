@@ -23,8 +23,10 @@ Boilerplate reutilizável de landing page em português (pt-BR): site estático,
 ```bash
 pnpm install
 cp .env.example .env   # já aponta para o emulator
-pnpm dev:emulators     # emulator do Firestore + astro dev
+pnpm dev:emulators     # emulator do Firestore + astro dev --mode test
 ```
+
+`pnpm dev:emulators` roda o Astro com `--mode test`, que lê o `.env.test` versionado (projeto `demo-landing`, emulator ligado); já `pnpm dev` lê o seu `.env`.
 
 Abra http://localhost:4321. Sem Java, `pnpm dev` sobe só o site (o envio do formulário falhará sem emulator ou projeto real).
 
@@ -32,7 +34,7 @@ Abra http://localhost:4321. Sem Java, `pnpm dev` sobe só o site (o envio do for
 
 1. **Conteúdo:** edite `src/content/sections/*.yaml` (hero, features, preços, FAQ, contato, header, footer etc.).
 2. **Site:** ajuste `src/site.config.ts` (nome, descrição, contatos, redes). Ao alterar a política de privacidade, atualize também `privacyPolicyVersion`: ela é gravada em cada contato como `consentVersion`.
-3. **Identidade visual:** tokens (cores, tipografia, raios) em `src/styles/global.css`. A cor do tema também está fixa em `src/components/seo/Seo.astro` (`theme-color`) e em `public/site.webmanifest` (`theme_color`).
+3. **Identidade visual:** tokens (cores, tipografia, raios) em `src/styles/global.css`. A cor do tema (`themeColor`/`backgroundColor`, usadas em `<meta name="theme-color">` e no `site.webmanifest` gerado) e as cores/logo das imagens OG também ficam em `src/site.config.ts`; nenhum componente precisa ser editado.
 4. **Logo e ícones:** logo em `src/assets/brand/`; favicons e ícones em `public/` (`favicon.ico`, `favicon.svg`, `apple-touch-icon.png`, `icon-192.png`, `icon-512.png`).
 5. **Textos legais:** substitua os placeholders `[NOME DA EMPRESA]`, `[CNPJ]` e `[E-MAIL DO ENCARREGADO]` em `src/content/legal/*.md` e revise o conteúdo com o jurídico do cliente.
 6. **Assuntos do formulário:** a lista fica em `src/content/sections/contact.yaml` **e** em `firebase/firestore.rules`. As duas precisam ser idênticas; depois de mudar, rode `pnpm test:rules` e publique as regras.
@@ -109,5 +111,10 @@ e, se quiser guardar os relatórios, publique a pasta como artifact no workflow 
 - CMS visual (Keystatic/Decap)
 - Infraestrutura AWS como código
 - Painel administrativo de contatos
+
+## Notas de operação
+
+- **release-please e CI:** PRs abertos com o `GITHUB_TOKEN` padrão não disparam outros workflows, então o `CI` não roda neles. Se a branch protection exigir CI nesses PRs, configure o release-please com um PAT ou GitHub App.
+- **Assets antigos no S3:** cada deploy sincroniza `_astro/` sem `--delete` (assets hash são imutáveis e páginas em cache ainda podem referenciá-los). Crie uma regra de lifecycle no bucket para expirar objetos de `_astro/` com mais de, por exemplo, 90 dias.
 
 Para contribuir, veja [CONTRIBUTING.md](CONTRIBUTING.md).

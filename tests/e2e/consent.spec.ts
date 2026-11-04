@@ -36,14 +36,17 @@ test('footer link reopens preferences', async ({ page }) => {
 test('accepting updates consent mode', async ({ page }) => {
   await page.goto('/');
   await page.getByRole('button', { name: 'Aceitar todos' }).click();
-  const update = await page.evaluate(() =>
-    (window.dataLayer as unknown[]).map((entry) => Array.from(entry as ArrayLike<unknown>)),
-  );
-  expect(update).toContainEqual([
-    'consent',
-    'update',
-    expect.objectContaining({ analytics_storage: 'granted' }),
-  ]);
+  await expect
+    .poll(() =>
+      page.evaluate(() =>
+        (window.dataLayer as unknown[]).map((entry) => Array.from(entry as ArrayLike<unknown>)),
+      ),
+    )
+    .toContainEqual([
+      'consent',
+      'update',
+      expect.objectContaining({ analytics_storage: 'granted' }),
+    ]);
 });
 
 test('no a11y violations with banner open', async ({ page, expectNoA11yViolations }) => {

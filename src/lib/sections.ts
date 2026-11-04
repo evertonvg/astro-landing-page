@@ -34,7 +34,10 @@ export async function enabledSections(): Promise<Set<SectionKey>> {
 }
 
 /** Drops links that point to a disabled (or missing) section. */
-export function buildNav(links: HeaderLink[], enabled: Set<SectionKey>): HeaderLink[] {
+export function buildNav<T extends { section?: SectionKey }>(
+  links: T[],
+  enabled: Set<SectionKey>,
+): T[] {
   return links.filter((link) => !link.section || enabled.has(link.section));
 }
 
