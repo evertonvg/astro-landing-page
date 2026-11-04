@@ -118,6 +118,8 @@ Em Settings > Environments > New environment > `production`, cadastre estas **va
 | `S3_BUCKET`                   | Nome do bucket                       |
 | `CLOUDFRONT_DISTRIBUTION_ID`  | ID da distribution                   |
 
+**Restrinja as branches de deploy:** em "Deployment branches and tags" do environment, selecione "Selected branches and tags" e permita somente `main`. A `sub` da trust policy fixa o repositório e o environment, mas não a branch; sem essa restrição, qualquer branch do repositório que referencie o environment `production` poderia assumir a role.
+
 **Aprovação manual (opcional):** em "Required reviewers" do environment, adicione quem deve aprovar cada deploy. O workflow `Deploy` ficará em espera até a aprovação.
 
 ## 5. Como o deploy funciona
