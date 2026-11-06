@@ -58,6 +58,10 @@ export default (cfg: CarouselConfig) => {
     playing: canPause,
     count: cfg.count,
     canPause,
+    /** Slides advance on their own: the live region stays silent (a playing video alone does not count). */
+    get autoAdvancing(): boolean {
+      return canAutoplay && this.playing;
+    },
     async init(this: { $root: HTMLElement; $refs: Record<string, HTMLElement>; selected: number }) {
       if (reducedMotion) {
         // Synchronous on purpose: stop the first slide's `autoplay` video before Embla loads.

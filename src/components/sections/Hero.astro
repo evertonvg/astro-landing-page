@@ -49,7 +49,7 @@ const controlClass =
     @focusout="focusChange($event)"
   >
     <div x-ref="viewport" class="overflow-hidden">
-      <div class="flex" aria-live="off" :aria-live="playing ? 'off' : 'polite'">
+      <div class="flex" aria-live="off" :aria-live="autoAdvancing ? 'off' : 'polite'">
         {slides.map((slide, index) => (
           <HeroSlide slide={slide} index={index} total={slides.length} carousel={true} />
         ))}
