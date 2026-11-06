@@ -50,7 +50,7 @@ jobs:
           echo "PUBLIC_GTM_ID=${{ vars.PUBLIC_GTM_ID }}" >> .env
           echo "PUBLIC_USE_FIREBASE_EMULATOR=false" >> .env
       - run: pnpm build
-      - uses: aws-actions/configure-aws-credentials@v4
+      - uses: aws-actions/configure-aws-credentials@v6
         with:
           role-to-assume: ${{ vars.AWS_ROLE_ARN }}
           aws-region: ${{ vars.AWS_REGION }}
