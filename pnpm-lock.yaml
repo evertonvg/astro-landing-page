@@ -9,17 +9,17 @@ importers:
   .:
     dependencies:
       '@alpinejs/collapse':
-        specifier: 3.17.4
-        version: 3.17.4
+        specifier: 3.17.5
+        version: 3.17.5
       '@alpinejs/focus':
-        specifier: 3.17.4
-        version: 3.17.4
+        specifier: 3.17.5
+        version: 3.17.5
       '@alpinejs/ui':
-        specifier: 3.17.4
-        version: 3.17.4
+        specifier: 3.17.5
+        version: 3.17.5
       '@astrojs/alpinejs':
         specifier: 1.0.0
-        version: 1.0.0(@types/alpinejs@3.17.0)(alpinejs@3.17.4)
+        version: 1.0.0(@types/alpinejs@3.17.0)(alpinejs@3.17.5)
       '@astrojs/sitemap':
         specifier: 3.7.4
         version: 3.7.4
@@ -36,8 +36,8 @@ importers:
         specifier: 4.3.3
         version: 4.3.3(vite@8.3.4(@types/node@24.19.2)(jiti@2.7.0)(yaml@2.9.1))
       alpinejs:
-        specifier: 3.17.4
-        version: 3.17.4
+        specifier: 3.17.5
+        version: 3.17.5
       astro:
         specifier: 7.4.1
         version: 7.4.1(@types/node@24.19.2)(jiti@2.7.0)(yaml@2.9.1)
@@ -156,14 +156,14 @@ importers:
 
 packages:
 
-  '@alpinejs/collapse@3.17.4':
-    resolution: {integrity: sha512-Us4cE8jHzKtRs4mYNbmX4art/Hpm90vIGH6h5Mcv1EWK9Dgg48RNzSlPFt9F/D6bk2onbdeagYayqEvzpPbqPg==}
+  '@alpinejs/collapse@3.17.5':
+    resolution: {integrity: sha512-6UJsyEef1a5gh18VhTomP/kHYFxg82ExKSyaezU0iMwTWZSNaApZIvdr7FbMMb5qs+TECctkRgJD37Y3QOyo+A==}
 
-  '@alpinejs/focus@3.17.4':
-    resolution: {integrity: sha512-IpZuMQC+nk9xEr9lfqzI+m7Pwti3dfiYhB4UrRIbO2KurezOM5HppYYXVtRQ1mD7L3R7rGtjAQksvWpCnk3lGw==}
+  '@alpinejs/focus@3.17.5':
+    resolution: {integrity: sha512-wQsgn+DKAxb7FD18jMgDsAlGqoayMiL8BYOiQIGcwCWxwqDKMVBX0OZ9/vezrf4u6C2LASkJHuvBphvOGgtZCg==}
 
-  '@alpinejs/ui@3.17.4':
-    resolution: {integrity: sha512-qXqw+ex3hGI0QNbhTVRCR4d6zuJIj45IjdFIS02TUHAkZJhk+tZfJJ5b4XsbhNAZd5hncAgiYxQmGHUff70H7w==}
+  '@alpinejs/ui@3.17.5':
+    resolution: {integrity: sha512-fF7Sxe+y47JfmBZerGo51AF9pakUd7awj1rvMxyop9AlYANcW/S/eHTRRIxvirs+n/W0cVUpt5hQcqR0BnGq2w==}
 
   '@antfu/install-pkg@2.1.0':
     resolution: {integrity: sha512-sdg9NxU3zR4Mnawfbc/x6GB5Wf17WYud5qOuEuxXjaKpYpMkISSJEjItGebXJ2bQ4DIcly4NYH23mtkGJjvKUw==}
@@ -1945,8 +1945,8 @@ packages:
   ajv@8.20.0:
     resolution: {integrity: sha512-Thbli+OlOj+iMPYFBVBfJ3OmCAnaSyNn4M1vz9T6Gka5Jt9ba/HIR56joy65tY6kx/FCF5VXNB819Y7/GUrBGA==}
 
-  alpinejs@3.17.4:
-    resolution: {integrity: sha512-N2gsr+58XVUt7OAPKnUGiKPDtkd+xbSGTae8C8IJxeRdkkhBJPIautkJ+qcwb7lcjJ/QK3/CPVIbN20JPvtK7A==}
+  alpinejs@3.17.5:
+    resolution: {integrity: sha512-XewMqRC6zjy8iaUPn86dxjvooAsNai3hUtQbdn0A5H2w7Jt10xHGZ1SczN5+Dvp3UKkuSEt9moy/UaUWOwKdnQ==}
 
   am-i-vibing@0.5.0:
     resolution: {integrity: sha512-KLcsDhqf1XRrJmJr+9I/C0EX2K+sGrAGZFgkmd84c8TJO9zJBu+/kFInjazu1KfJWFhWDKdRWkpBzEs7s35DVA==}
@@ -6221,14 +6221,14 @@ packages:
 
 snapshots:
 
-  '@alpinejs/collapse@3.17.4': {}
+  '@alpinejs/collapse@3.17.5': {}
 
-  '@alpinejs/focus@3.17.4':
+  '@alpinejs/focus@3.17.5':
     dependencies:
       focus-trap: 8.2.3
       tabbable: 6.5.0
 
-  '@alpinejs/ui@3.17.4': {}
+  '@alpinejs/ui@3.17.5': {}
 
   '@antfu/install-pkg@2.1.0':
     dependencies:
@@ -6242,10 +6242,10 @@ snapshots:
       call-me-maybe: 1.0.2
       js-yaml: 4.3.2
 
-  '@astrojs/alpinejs@1.0.0(@types/alpinejs@3.17.0)(alpinejs@3.17.4)':
+  '@astrojs/alpinejs@1.0.0(@types/alpinejs@3.17.0)(alpinejs@3.17.5)':
     dependencies:
       '@types/alpinejs': 3.17.0
-      alpinejs: 3.17.4
+      alpinejs: 3.17.5
 
   '@astrojs/astro2tsx@0.1.3(@emnapi/runtime@1.11.3)':
     dependencies:
@@ -8145,7 +8145,7 @@ snapshots:
       json-schema-traverse: 1.0.0
       require-from-string: 2.0.2
 
-  alpinejs@3.17.4:
+  alpinejs@3.17.5:
     dependencies:
       '@vue/reactivity': 3.5.44
 
